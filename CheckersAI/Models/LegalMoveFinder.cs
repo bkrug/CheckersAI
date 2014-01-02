@@ -17,12 +17,12 @@ namespace CheckersAI.Models
 
         public List<Move> GetLegalMoves(int row, int column)
         {
-            return GetNonJumpingMove(row, column)
-                .Union(GetJumpingMove(row, column))
+            return GetNonJumpingMoves(row, column)
+                .Union(GetJumpingMoves(row, column))
                 .ToList();
         }
 
-        private List<Move> GetNonJumpingMove(int row, int column)
+        private List<Move> GetNonJumpingMoves(int row, int column)
         {
             var piece = _pieces[row, column];
             var rowChange = piece.DownBoundSide ? 1 : -1;
@@ -41,77 +41,75 @@ namespace CheckersAI.Models
             return directions.Select(d => new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = d, Jump = false } } }).ToList();
         }
 
-        private List<Move> GetJumpingMove(int row, int column)
+        private List<Move> GetJumpingMoves(int row, int column)
         {
             var piece = _pieces[row, column];
-            var rowChange = piece.DownBoundSide ? 1 : -1;
             var piecesClone = (Piece[,])_pieces.Clone();
             piecesClone[row, column] = null;
-            return GetJumpingSteps(row, column, piece, rowChange, new List<MoveStep>(), piecesClone);
+            return GetJumpingSteps(row, column, piece, new List<MoveStep>(), piecesClone);
         }
 
-        private List<Move> GetJumpingSteps(int row, int column, Piece piece, int rowChange, List<MoveStep> moveSteps, Piece[,] piecesClone)
+        private List<Move> GetJumpingSteps(int row, int column, Piece piece, List<MoveStep> moveSteps, Piece[,] piecesClone)
         {
             var moves = new List<Move>();
-            var nextJumpRow = row + rowChange * 2;
-            var nextRow = row + rowChange;
-            var leftJumpColumn = column - 2;
-            var rightJumpColumn = column + 2;
-            if (nextRow >= BoardPosition.MIN_POSITION && nextRow <= BoardPosition.MAX_POSITION && nextJumpRow >= BoardPosition.MIN_POSITION && nextJumpRow <= BoardPosition.MAX_POSITION)
-            {
-                var forwardLeftPiece = column - 1 < BoardPosition.MIN_POSITION ? null : piecesClone[nextRow, column - 1];
-                var forwardRightPiece = column + 1 > BoardPosition.MAX_POSITION ? null : piecesClone[nextRow, column + 1];
-                var forwardLeftTwice = leftJumpColumn < BoardPosition.MIN_POSITION ? null : piecesClone[nextJumpRow, leftJumpColumn];
-                var forwardRightTwice = rightJumpColumn > BoardPosition.MAX_POSITION ? null : piecesClone[nextJumpRow, rightJumpColumn];
-                if (leftJumpColumn >= BoardPosition.MIN_POSITION && forwardLeftPiece != null && forwardLeftPiece.DownBoundSide != piece.DownBoundSide && forwardLeftTwice == null)
-                {
-                    var move = new Move() { Steps = moveSteps.ToList() };
-                    move.Steps.Add(new MoveStep() { Direction = ForwardLeft(piece), Jump = true });
-                    moves.Add(move);
-                    var nextClone = (Piece[,])piecesClone.Clone();
-                    nextClone[nextRow, column - 1] = null;
-                    moves.AddRange(GetJumpingSteps(nextJumpRow, leftJumpColumn, piece, rowChange, move.Steps, nextClone));
-                }
-                if (rightJumpColumn <= BoardPosition.MAX_POSITION && forwardRightPiece != null && forwardRightPiece.DownBoundSide != piece.DownBoundSide && forwardRightTwice == null)
-                {
-                    var move = new Move() { Steps = moveSteps.ToList() };
-                    move.Steps.Add(new MoveStep() { Direction = ForwardRight(piece), Jump = true });
-                    moves.Add(move);
-                    var nextClone = (Piece[,])piecesClone.Clone();
-                    nextClone[nextRow, column + 1] = null;
-                    moves.AddRange(GetJumpingSteps(nextJumpRow, rightJumpColumn, piece, rowChange, move.Steps, nextClone));
-                }
-            }
+            moves.AddRange( GetStepsInDirection(row, column, ForwardLeft(piece), piecesClone, piece, moveSteps) );
+            moves.AddRange( GetStepsInDirection(row, column, ForwardRight(piece), piecesClone, piece, moveSteps) );
             if (piece.IsKing)
             {
-                var prevJumpRow = row - rowChange * 2;
-                var prevRow = row - rowChange;
-                if (prevJumpRow < BoardPosition.MIN_POSITION || prevJumpRow > BoardPosition.MAX_POSITION)
+                moves.AddRange( GetStepsInDirection(row, column, BackwardLeft(piece), piecesClone, piece, moveSteps) );
+                moves.AddRange( GetStepsInDirection(row, column, BackwardRight(piece), piecesClone, piece, moveSteps) );
+            }
+            return moves;
+        }
+
+        private List<Move> GetStepsInDirection(int row, int column, MoveDirection direction, Piece[,] piecesClone, Piece piece, List<MoveStep> moveSteps)
+        {
+            var moves = new List<Move>();
+            int jumpToRow, jumpToColumn, captureRow, captureColumn;
+            GetRelativePositions(direction, row, column, out jumpToRow, out jumpToColumn, out captureRow, out captureColumn);
+            if (jumpToRow >= BoardPosition.MIN_POSITION && jumpToRow <= BoardPosition.MAX_POSITION)
+            {
+                var isValidCaturePos = captureColumn >= BoardPosition.MIN_POSITION && captureColumn <= BoardPosition.MAX_POSITION;
+                var capturePiece = isValidCaturePos ? piecesClone[captureRow, captureColumn] : null;
+                var isValidJumpPos = jumpToColumn >= BoardPosition.MIN_POSITION && jumpToColumn <= BoardPosition.MAX_POSITION;
+                var jumpPosition = isValidJumpPos ? piecesClone[jumpToRow, jumpToColumn] : null;
+                var isPieceOpponent = capturePiece != null && capturePiece.DownBoundSide != piece.DownBoundSide;
+                if (isValidJumpPos && isPieceOpponent && jumpPosition == null)
+                {
+                    var move = new Move() { Steps = moveSteps.ToList() };
+                    move.Steps.Add(new MoveStep() { Direction = direction, Jump = true });
+                    moves.Add(move);
+                    var nextClone = (Piece[,])piecesClone.Clone();
+                    nextClone[captureRow, captureColumn] = null;
+                    moves.AddRange(GetJumpingSteps(jumpToRow, jumpToColumn, piece, move.Steps, nextClone));
                     return moves;
-                var backwardLeftPiece = column - 1 < BoardPosition.MIN_POSITION ? null : piecesClone[prevRow, column - 1];
-                var backwardRightPiece = column + 1 > BoardPosition.MAX_POSITION ? null : piecesClone[prevRow, column + 1];
-                var backwardLeftTwice = leftJumpColumn < BoardPosition.MIN_POSITION ? null : piecesClone[prevJumpRow, leftJumpColumn];
-                var backwardRightTwice = rightJumpColumn > BoardPosition.MAX_POSITION ? null : piecesClone[prevJumpRow, rightJumpColumn];
-                if (leftJumpColumn >= BoardPosition.MIN_POSITION && backwardLeftPiece != null && backwardLeftPiece.DownBoundSide != piece.DownBoundSide && backwardLeftTwice == null)
-                {
-                    var move = new Move() { Steps = moveSteps.ToList() };
-                    move.Steps.Add(new MoveStep() { Direction = BackwardLeft(piece), Jump = true });
-                    moves.Add(move);
-                    var nextClone = (Piece[,])piecesClone.Clone();
-                    nextClone[prevRow, column - 1] = null;
-                    moves.AddRange(GetJumpingSteps(prevJumpRow, leftJumpColumn, piece, rowChange, move.Steps, nextClone));
-                }
-                if (rightJumpColumn <= BoardPosition.MAX_POSITION && backwardRightPiece != null && backwardRightPiece.DownBoundSide != piece.DownBoundSide && backwardRightTwice == null)
-                {
-                    var move = new Move() { Steps = moveSteps.ToList() };
-                    move.Steps.Add(new MoveStep() { Direction = BackwardRight(piece), Jump = true });
-                    moves.Add(move);
-                    var nextClone = (Piece[,])piecesClone.Clone();
-                    nextClone[prevRow, column + 1] = null;
-                    moves.AddRange(GetJumpingSteps(prevJumpRow, rightJumpColumn, piece, rowChange, move.Steps, nextClone));
                 }
             }
             return moves;
+        }
+
+        private void GetRelativePositions(MoveDirection direction, int currentRow, int currentColumn, out int jumpToRow, out int jumpToColumn, out int captureRow, out int captureColumn)
+        {
+            if (direction == MoveDirection.UP_LEFT || direction == MoveDirection.UP_RIGHT)
+            {
+                captureRow = currentRow - 1;
+                jumpToRow = currentRow - 2;
+            }
+            else
+            {
+                captureRow = currentRow + 1;
+                jumpToRow = currentRow + 2;
+            }
+            if (direction == MoveDirection.UP_LEFT || direction == MoveDirection.DOWN_LEFT)
+            {
+                captureColumn = currentColumn - 1;
+                jumpToColumn = currentColumn - 2;
+            }
+            else
+            {
+                captureColumn = currentColumn + 1;
+                jumpToColumn = currentColumn + 2;
+            }
         }
 
         private MoveDirection ForwardLeft(Piece piece)
