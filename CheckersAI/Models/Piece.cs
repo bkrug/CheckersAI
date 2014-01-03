@@ -8,7 +8,7 @@ namespace CheckersAI.Models
     public class Piece
     {
         public bool IsKing { get; set; }
-        public bool DownBoundSide { get; set; }
+        public bool DownBoundTeam { get; set; }
     }
 
     //public class BoardState : IBoardState, ICloneable

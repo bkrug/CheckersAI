@@ -17,7 +17,7 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false }}}
@@ -26,7 +26,7 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}}
@@ -35,8 +35,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                 };
@@ -44,8 +44,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                 };
@@ -53,8 +53,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = true, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = true, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                 };
@@ -62,8 +62,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                 };
@@ -71,9 +71,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[6, 5] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[6, 5] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                 };
@@ -81,8 +81,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 2] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 2] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false }}},
                 };
@@ -135,7 +135,7 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -146,7 +146,7 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -157,9 +157,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[3, 4] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[3, 4] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}}
@@ -168,9 +168,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}}
@@ -179,9 +179,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 2] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 2] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}}
@@ -190,10 +190,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[6, 5] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 2] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[6, 5] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 2] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}}
@@ -207,8 +207,8 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}}
@@ -217,8 +217,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}}
@@ -227,9 +227,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 2] = new Piece() { DownBoundSide = true, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 2] = new Piece() { DownBoundTeam = true, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}}
                 };
@@ -237,8 +237,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[5, 2] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[5, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true}}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false }}}
@@ -247,9 +247,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[2, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 6] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[2, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 6] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}},
@@ -260,10 +260,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[0, 1] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[1, 2] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 6] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[0, 1] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[1, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 6] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}},
@@ -277,10 +277,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[0, 1] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[1, 2] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[0, 1] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[1, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}},
@@ -294,10 +294,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[0, 1] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[1, 2] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 2] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 2] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[0, 1] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[1, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 2] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}},
@@ -311,8 +311,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = true, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = true, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = true }}}
@@ -321,9 +321,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[1, 4] = new Piece() { DownBoundSide = true, IsKing = true };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[1, 4] = new Piece() { DownBoundTeam = true, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = true }}},
@@ -334,10 +334,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[2, 3] = new Piece() { DownBoundSide = true, IsKing = false };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 6] = new Piece() { DownBoundSide = false, IsKing = true };
+                pieces[2, 3] = new Piece() { DownBoundTeam = true, IsKing = false };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 6] = new Piece() { DownBoundTeam = false, IsKing = true };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}},
@@ -355,8 +355,8 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -367,8 +367,8 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = true, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = true, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -379,9 +379,9 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 2] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -392,10 +392,10 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[4, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 6] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[3, 6] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[4, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 6] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[3, 6] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false }}},
@@ -411,14 +411,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece[8, 8];
-                pieces[2, 3] = new Piece() { DownBoundSide = true, IsKing = true };
-                pieces[3, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 6] = new Piece() { DownBoundSide = false, IsKing = true };
-                pieces[1, 6] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[1, 4] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[3, 2] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 2] = new Piece() { DownBoundSide = false, IsKing = false };
-                pieces[5, 4] = new Piece() { DownBoundSide = false, IsKing = false };
+                pieces[2, 3] = new Piece() { DownBoundTeam = true, IsKing = true };
+                pieces[3, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 6] = new Piece() { DownBoundTeam = false, IsKing = true };
+                pieces[1, 6] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[1, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[3, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 2] = new Piece() { DownBoundTeam = false, IsKing = false };
+                pieces[5, 4] = new Piece() { DownBoundTeam = false, IsKing = false };
                 var expectedMoves = new List<Move>() {
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false }}},
                     new Move() { Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = true }}},

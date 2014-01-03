@@ -9,8 +9,12 @@ namespace CheckersAI.Models
     {
         private Piece[,] _pieces; 
         private LegalMoveFinder() { }
-        public LegalMoveFinder(Piece[,] pieces) {
-            if (pieces.Rank != 2 || pieces.GetLength(0) != BoardPosition.MAX_POSITION + 1 || pieces.GetLength(1) != BoardPosition.MAX_POSITION + 1)
+        public const int MIN_POSITION = 0;
+        public const int MAX_POSITION = 7;
+
+        public LegalMoveFinder(Piece[,] pieces)
+        {
+            if (pieces.Rank != 2 || pieces.GetLength(0) != MAX_POSITION + 1 || pieces.GetLength(1) != MAX_POSITION + 1)
                 throw new ApplicationException("Array of pieces must be 8x8.");
             _pieces = pieces;
         }
@@ -25,7 +29,7 @@ namespace CheckersAI.Models
         private List<Move> GetNonJumpingMoves(int row, int column)
         {
             var piece = _pieces[row, column];
-            var rowChange = piece.DownBoundSide ? 1 : -1;
+            var rowChange = piece.DownBoundTeam ? 1 : -1;
             var directions = new List<MoveDirection>();
             if (_pieces[row + rowChange, column - 1] == null)
                 directions.Add(ForwardLeft(piece));
@@ -67,14 +71,14 @@ namespace CheckersAI.Models
             var moves = new List<Move>();
             int jumpToRow, jumpToColumn, captureRow, captureColumn;
             GetRelativePositions(direction, row, column, out jumpToRow, out jumpToColumn, out captureRow, out captureColumn);
-            if (jumpToRow >= BoardPosition.MIN_POSITION && jumpToRow <= BoardPosition.MAX_POSITION)
+            if (jumpToRow >= MIN_POSITION && jumpToRow <= MAX_POSITION)
             {
-                var isValidCaturePos = captureColumn >= BoardPosition.MIN_POSITION && captureColumn <= BoardPosition.MAX_POSITION;
+                var isValidCaturePos = captureColumn >= MIN_POSITION && captureColumn <= MAX_POSITION;
                 var capturePiece = isValidCaturePos ? piecesClone[captureRow, captureColumn] : null;
-                var isValidJumpPos = jumpToColumn >= BoardPosition.MIN_POSITION && jumpToColumn <= BoardPosition.MAX_POSITION;
+                var isValidJumpPos = jumpToColumn >= MIN_POSITION && jumpToColumn <= MAX_POSITION;
                 var jumpPosition = isValidJumpPos ? piecesClone[jumpToRow, jumpToColumn] : null;
-                var isPieceOpponent = capturePiece != null && capturePiece.DownBoundSide != piece.DownBoundSide;
-                if (isValidJumpPos && isPieceOpponent && jumpPosition == null)
+                var isOpponentPiece = capturePiece != null && capturePiece.DownBoundTeam != piece.DownBoundTeam;
+                if (isValidJumpPos && isOpponentPiece && jumpPosition == null)
                 {
                     var move = new Move() { Steps = moveSteps.ToList() };
                     move.Steps.Add(new MoveStep() { Direction = direction, Jump = true });
@@ -114,22 +118,22 @@ namespace CheckersAI.Models
 
         private MoveDirection ForwardLeft(Piece piece)
         {
-            return piece.DownBoundSide ? MoveDirection.DOWN_LEFT : MoveDirection.UP_LEFT;
+            return piece.DownBoundTeam ? MoveDirection.DOWN_LEFT : MoveDirection.UP_LEFT;
         }
 
         private MoveDirection ForwardRight(Piece piece)
         {
-            return piece.DownBoundSide ? MoveDirection.DOWN_RIGHT : MoveDirection.UP_RIGHT;
+            return piece.DownBoundTeam ? MoveDirection.DOWN_RIGHT : MoveDirection.UP_RIGHT;
         }
 
         private MoveDirection BackwardLeft(Piece piece)
         {
-            return piece.DownBoundSide ? MoveDirection.UP_LEFT : MoveDirection.DOWN_LEFT;
+            return piece.DownBoundTeam ? MoveDirection.UP_LEFT : MoveDirection.DOWN_LEFT;
         }
 
         private MoveDirection BackwardRight(Piece piece)
         {
-            return piece.DownBoundSide ? MoveDirection.UP_RIGHT : MoveDirection.DOWN_RIGHT;
+            return piece.DownBoundTeam ? MoveDirection.UP_RIGHT : MoveDirection.DOWN_RIGHT;
         }
     }
 
@@ -146,25 +150,6 @@ namespace CheckersAI.Models
 
     public enum MoveDirection {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
-    }
-
-    public class BoardPosition
-    {
-        public int Row { get; private set; }
-        public int Column { get; private set; }
-        public const int MIN_POSITION = 0;
-        public const int MAX_POSITION = 7;
-
-        private BoardPosition() { }
-        public BoardPosition(int row, int column) 
-        {
-            if (row < MIN_POSITION || column < MIN_POSITION || row > MAX_POSITION || column > MAX_POSITION)
-                throw new OffBoardException(row, column);
-            if (row % 2 == column % 2)
-                throw new InvalidPositionException(row, column);
-            Row = row;
-            Column = column;
-        }
     }
 
     public class OffBoardException : ApplicationException {
