@@ -7,9 +7,9 @@ namespace CheckersAI.Models
 {
     public class GameStatus
     {
-        private Piece[,] _pieces;
+        private Piece?[,] _pieces;
 
-        public GameStatus(Piece[,] pieces)
+        public GameStatus(Piece?[,] pieces)
         {
             _pieces = pieces;
         }
@@ -36,7 +36,7 @@ namespace CheckersAI.Models
                 {
                     var piece = _pieces[r, c++];
                     if (piece != null)
-                        if (piece.DownBoundTeam)
+                        if (PieceUtil.OnDownTeam(piece.Value))
                             ++downPieces;
                         else
                             ++upPieces;
@@ -68,7 +68,7 @@ namespace CheckersAI.Models
                 {
                     var piece = _pieces[r, c];
                     if (piece != null)
-                        if (piece.DownBoundTeam)
+                        if (PieceUtil.OnDownTeam(piece.Value))
                             downMoves += moveFinder.GetLegalMoves(r, c).Count();
                         else
                             upMoves += moveFinder.GetLegalMoves(r, c).Count();
@@ -85,6 +85,40 @@ namespace CheckersAI.Models
                     return false;
                 return null;
             }
+        }
+
+        public void MovePiece(int row, int column, Move move)
+        {
+            MovePiece(ref _pieces, row, column, move);
+        }
+
+        private void MovePiece(ref Piece?[,] pieces, int row, int column, Move move)
+        {
+            foreach(var step in move.Steps) {
+                var oldRow = row;
+                var oldColumn = column;
+                var moveVertical = step.Direction == MoveDirection.UP_RIGHT || step.Direction == MoveDirection.UP_LEFT ? -1 : 1;
+                var moveHorizontal = step.Direction == MoveDirection.UP_LEFT || step.Direction == MoveDirection.DOWN_LEFT ? -1 : 1;
+                if (step.Jump)
+                {
+                    pieces[row + moveVertical, column + moveHorizontal] = null;
+                    moveVertical *= 2;
+                    moveHorizontal *= 2;
+                }
+                row += moveVertical;
+                column += moveHorizontal;
+                pieces[row, column] = pieces[oldRow, oldColumn];
+                if (pieces[row, column].HasValue && (row == LegalMoveFinder.MIN_POSITION || row == LegalMoveFinder.MAX_POSITION))
+                    pieces[row, column] = PieceUtil.King(pieces[row, column].Value);
+                pieces[oldRow, oldColumn] = null;
+            }
+        }
+
+        public Piece?[,] CloneAndMove(int row, int column, Move move)
+        {
+            var clonedPieces = (Piece?[,])_pieces.Clone();
+            MovePiece(ref clonedPieces, row, column, move);
+            return clonedPieces;
         }
     }
 }
