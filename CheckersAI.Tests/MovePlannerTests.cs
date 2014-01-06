@@ -16,14 +16,32 @@ namespace CheckersAI.Tests
             pieces[4, 3] = Piece.DOWN_TEAM;
             pieces[5, 4] = Piece.UP_TEAM;
             var planner = new MovePlanner(pieces);
-            var expectedMoveForDown = new Move() { Steps = new List<MoveStep>() { 
-                new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } };
-            var expectedMoveForUp = new Move() { Steps = new List<MoveStep>() { 
-                new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } } };
+            var expectedMoveForDown = new RecommendedMove()
+            {
+                Row = 4,
+                Column = 3,
+                Move = new Move() { Steps = new List<MoveStep>() { 
+                    new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } }
+            };
+            var expectedMoveForUp = new RecommendedMove()
+            {
+                Row = 5,
+                Column = 4,
+                Move = new Move() { Steps = new List<MoveStep>() { 
+                    new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } } }
+            };
             var actualDownMove = planner.GetNextMove(true);
-            CompareMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
+            CompareRecommendedMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
             var actualUpMove = planner.GetNextMove(false);
-            CompareMoves(expectedMoveForUp, actualUpMove, "Up should win in one move.");
+            CompareRecommendedMoves(expectedMoveForUp, actualUpMove, "Up should win in one move.");
+        }
+
+        private void CompareRecommendedMoves(RecommendedMove expected, RecommendedMove actual, string message)
+        {
+            if (expected.Row != actual.Row && expected.Column != actual.Column)
+                Assert.Fail(message);
+            CompareMoves(expected.Move, actual.Move, message);
+            Assert.IsTrue(true, message);
         }
 
         private void CompareMoves(Move expected, Move actual, string message)

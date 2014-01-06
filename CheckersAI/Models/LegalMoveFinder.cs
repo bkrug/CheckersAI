@@ -173,7 +173,15 @@ namespace CheckersAI.Models
         public List<Move> Moves;
     }
 
-    public struct Move { 
+    public struct RecommendedMove
+    {
+        public int Row;
+        public int Column;
+        public Move Move;
+    }
+
+    public struct Move
+    { 
         public List<MoveStep> Steps;
         public override string ToString() { return String.Join(", ", Steps.Select(s => s.ToString())); }
     }
