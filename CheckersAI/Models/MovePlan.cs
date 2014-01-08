@@ -7,10 +7,12 @@ namespace CheckersAI.Models
 {
     public class MovePlan
     {
+        public const int MAX_DEPTH = 3;
         public int StartRow;
         public int StartColumn;
         public Move Move { get; set; }
         public int Wins;
         public int Loses;
+        public int Incomplete;
     }
 }

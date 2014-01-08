@@ -14,7 +14,7 @@ namespace CheckersAI.Models
             _pieces = pieces;
         }
 
-        public bool? WinnerIsDownBoundTeam
+        public bool? Winner
         {
             get
             {

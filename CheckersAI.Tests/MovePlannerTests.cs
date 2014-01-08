@@ -10,7 +10,7 @@ namespace CheckersAI.Tests
     public class MovePlannerTests
     {
         [TestMethod]
-        public void Planer_GetNextMove()
+        public void Planner_GetNextMove()
         {
             var pieces = new Piece?[8, 8];
             pieces[4, 3] = Piece.DOWN_TEAM;
