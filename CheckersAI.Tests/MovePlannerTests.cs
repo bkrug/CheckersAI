@@ -10,25 +10,31 @@ namespace CheckersAI.Tests
     public class MovePlannerTests
     {
         [TestMethod]
-        public void Planner_GetNextMove()
+        public void Planner_GetNextMove_OneTurn()
         {
             var pieces = new Piece?[8, 8];
             pieces[4, 3] = Piece.DOWN_TEAM;
             pieces[5, 4] = Piece.UP_TEAM;
             var planner = new MovePlanner(pieces);
-            var expectedMoveForDown = new RecommendedMove()
+            var expectedMoveForDown = new MovePlan()
             {
-                Row = 4,
-                Column = 3,
+                StartRow = 4,
+                StartColumn = 3,
                 Move = new Move() { Steps = new List<MoveStep>() { 
-                    new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } }
+                    new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } },
+                Wins = 1,
+                Loses = 0,
+                Incomplete = 0
             };
-            var expectedMoveForUp = new RecommendedMove()
+            var expectedMoveForUp = new MovePlan()
             {
-                Row = 5,
-                Column = 4,
+                StartRow = 5,
+                StartColumn = 4,
                 Move = new Move() { Steps = new List<MoveStep>() { 
-                    new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } } }
+                    new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } } },
+                Wins = 1,
+                Loses = 0,
+                Incomplete = 0
             };
             var actualDownMove = planner.GetNextMove(true);
             CompareRecommendedMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
@@ -36,12 +42,63 @@ namespace CheckersAI.Tests
             CompareRecommendedMoves(expectedMoveForUp, actualUpMove, "Up should win in one move.");
         }
 
-        private void CompareRecommendedMoves(RecommendedMove expected, RecommendedMove actual, string message)
+        [TestMethod]
+        public void Planner_GetNextMove_TwoTurn()
         {
-            if (expected.Row != actual.Row && expected.Column != actual.Column)
-                Assert.Fail(message);
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[5, 3] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction  = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, "One-to-one wind.");
+            }
+            //{
+            //    var pieces = new Piece?[8, 8];
+            //    pieces[2, 4] = Piece.DOWN_TEAM;
+            //    pieces[3, 1] = Piece.DOWN_TEAM;
+            //    pieces[5, 3] = Piece.UP_TEAM;
+            //    var planner = new MovePlanner(pieces);
+            //    var expectedMove = new RecommendedMove()
+            //    {
+            //        Row = 2,
+            //        Column = 4,
+            //        Move = new Move()
+            //        {
+            //            Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+            //        }
+            //    };
+            //    var actualMove = planner.GetNextMove(true);
+            //    CompareRecommendedMoves(expectedMove, actualMove, "One-to-one wind.");
+            //}
+        }
+
+        private void CompareRecommendedMoves(MovePlan expected, MovePlan actual, string message)
+        {
+            if (expected.StartRow != actual.StartRow)
+                Assert.Fail(message + " StartRow is wrong.");
+            if (expected.StartColumn != actual.StartColumn)
+                Assert.Fail(message + " EndRow is wrong.");
+            if (expected.Wins != actual.Wins)
+                Assert.Fail(message + " Wins is wrong.");
+            if (expected.Loses != actual.Loses)
+                Assert.Fail(message + " Loses is wrong.");
+            if (expected.Incomplete != actual.Incomplete)
+                Assert.Fail(message + " Incomplete is wrong.");
             CompareMoves(expected.Move, actual.Move, message);
-            Assert.IsTrue(true, message);
+            Assert.IsTrue(true, message + " Move is wrong.");
         }
 
         private void CompareMoves(Move expected, Move actual, string message)
