@@ -173,13 +173,6 @@ namespace CheckersAI.Models
         public List<Move> Moves;
     }
 
-    public struct RecommendedMove
-    {
-        public int Row;
-        public int Column;
-        public Move Move;
-    }
-
     public struct Move
     { 
         public List<MoveStep> Steps;
@@ -194,16 +187,5 @@ namespace CheckersAI.Models
 
     public enum MoveDirection {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT
-    }
-
-    public class OffBoardException : ApplicationException {
-        private OffBoardException() { }
-        public OffBoardException(int row, int column) : base("The position " + row + ", " + column + " is off the board.") { }
-    }
-
-    public class InvalidPositionException : ApplicationException
-    {
-        private InvalidPositionException() { }
-        public InvalidPositionException(int row, int column) : base("The position " + row + ", " + column + " is invalid.") { }
     }
 }

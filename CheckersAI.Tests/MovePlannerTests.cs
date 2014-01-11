@@ -9,32 +9,31 @@ namespace CheckersAI.Tests
     [TestClass]
     public class MovePlannerTests
     {
+        private int _lowPlanDepth = 6;
+
         [TestMethod]
         public void Planner_GetNextMove_OneTurn()
         {
             var pieces = new Piece?[8, 8];
             pieces[4, 3] = Piece.DOWN_TEAM;
             pieces[5, 4] = Piece.UP_TEAM;
-            var planner = new MovePlanner(pieces);
+            var planner = new MovePlanner(pieces, _lowPlanDepth);
             var expectedMoveForDown = new MovePlan()
             {
                 StartRow = 4,
                 StartColumn = 3,
                 Move = new Move() { Steps = new List<MoveStep>() { 
                     new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } },
-                Wins = 1,
-                Loses = 0,
-                Incomplete = 0
+                Heuristic = MovePlanner.WinHeuristic
             };
             var expectedMoveForUp = new MovePlan()
             {
                 StartRow = 5,
                 StartColumn = 4,
                 Move = new Move() { Steps = new List<MoveStep>() { 
-                    new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } } },
-                Wins = 1,
-                Loses = 0,
-                Incomplete = 0
+                    new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } }
+                },
+                Heuristic = MovePlanner.WinHeuristic
             };
             var actualDownMove = planner.GetNextMove(true);
             CompareRecommendedMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
@@ -49,7 +48,7 @@ namespace CheckersAI.Tests
                 var pieces = new Piece?[8, 8];
                 pieces[2, 4] = Piece.DOWN_TEAM;
                 pieces[5, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces);
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 2,
@@ -58,19 +57,17 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction  = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 };
                 var actualMove = planner.GetNextMove(true);
-                CompareRecommendedMoves(expectedMove, actualMove, "One-to-one wind.");
+                CompareRecommendedMoves(expectedMove, actualMove, "One-to-one win.");
             }
             {
                 var pieces = new Piece?[8, 8];
                 pieces[2, 4] = Piece.DOWN_TEAM;
                 pieces[3, 1] = Piece.DOWN_TEAM;
                 pieces[5, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces);
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -80,9 +77,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -92,9 +87,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 var actualMove = planner.GetNextMove(true);
                 var matchFound = false;
@@ -110,7 +103,7 @@ namespace CheckersAI.Tests
                 pieces[2, 6] = Piece.DOWN_TEAM;
                 pieces[3, 1] = Piece.DOWN_TEAM;
                 pieces[5, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces);
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -120,9 +113,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -132,9 +123,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -144,9 +133,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
-                    Wins = 2,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 var actualMove = planner.GetNextMove(true);
                 var matchFound = false;
@@ -159,8 +146,6 @@ namespace CheckersAI.Tests
             }
         }
 
-        //This test fails because the tested method returns a winning move, but a longer path to a winning move.
-        //I won't fix the method, because I'm going to redo the AI.
         [TestMethod]
         public void Planner_GetNextMove_ThreeTurns()
         {
@@ -170,7 +155,7 @@ namespace CheckersAI.Tests
                 pieces[2, 4] = Piece.DOWN_TEAM;
                 pieces[2, 6] = Piece.DOWN_TEAM;
                 pieces[6, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces);
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -180,9 +165,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
-                    Wins = 4,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -192,9 +175,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 4,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -204,9 +185,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
-                    Wins = 4,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -216,9 +195,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
                     },
-                    Wins = 4,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
@@ -228,9 +205,7 @@ namespace CheckersAI.Tests
                     {
                         Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
-                    Wins = 4,
-                    Loses = 0,
-                    Incomplete = 0
+                    Heuristic = MovePlanner.WinHeuristic
                 });
                 var actualMove = planner.GetNextMove(true);
                 var matchFound = false;
@@ -245,16 +220,9 @@ namespace CheckersAI.Tests
 
         private void CompareRecommendedMoves(MovePlan expected, MovePlan actual, string message)
         {
-            if (expected.StartRow != actual.StartRow)
-                Assert.Fail(message + " StartRow is wrong.");
-            if (expected.StartColumn != actual.StartColumn)
-                Assert.Fail(message + " EndRow is wrong.");
-            if (expected.Wins != actual.Wins)
-                Assert.Fail(message + " Wins is wrong.");
-            if (expected.Loses != actual.Loses)
-                Assert.Fail(message + " Loses is wrong.");
-            if (expected.Incomplete != actual.Incomplete)
-                Assert.Fail(message + " Incomplete is wrong.");
+            Assert.AreEqual(expected.StartRow, actual.StartRow, message + " StartRow is wrong.");
+            Assert.AreEqual(expected.StartColumn, actual.StartColumn, message + " EndRow is wrong.");
+            Assert.AreEqual(expected.Heuristic, actual.Heuristic, message + " Heuristic is wrong.");
             CompareMoves(expected.Move, actual.Move, message);
             Assert.IsTrue(true, message + " Move is wrong.");
         }
@@ -285,11 +253,7 @@ namespace CheckersAI.Tests
                 return false;
             if (expected.StartColumn != actual.StartColumn)
                 return false;
-            if (expected.Wins != actual.Wins)
-                return false;
-            if (expected.Loses != actual.Loses)
-                return false;
-            if (expected.Incomplete != actual.Incomplete)
+            if (expected.Heuristic != actual.Heuristic)
                 return false;
             return AreMatches(expected.Move, actual.Move);
         }

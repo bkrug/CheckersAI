@@ -8,88 +8,90 @@ namespace CheckersAI.Models
 	public class MovePlanner
 	{
         private Piece?[,] _pieces;
+        private int _planDepth;
+
+        public static int WinHeuristic
+        {
+            get { return Int32.MaxValue; }
+        }
 
 		private MovePlanner() {}
-        public MovePlanner(Piece?[,] pieces) {
+        public MovePlanner(Piece?[,] pieces, int planDepth) {
             _pieces = pieces;
+            _planDepth = planDepth;
         }
 
 		//TODO: A unit test will end up testing other methods as well as this one.
         public MovePlan GetNextMove(bool team) {
             var finder = new LegalMoveFinder(_pieces);
+            var board = new GameStatus(_pieces);
             var movePlans = new List<MovePlan>();
-            var status = new GameStatus(_pieces);
             foreach (var positionMove in finder.GetLegalMoves(team))
             {
                 foreach (var move in positionMove.Moves)
                 {
-                    var newPieces = status.CloneAndMove(positionMove.Row, positionMove.Column, move);
-                    var newBoard = new GameStatus(newPieces);
-                    if (newBoard.Winner == team)
-                        return new MovePlan() { 
-                            StartRow = positionMove.Row, 
-                            StartColumn = positionMove.Column, 
-                            Move = move,
-							Wins = 1
-                        };
-                    else
-                    {
-                        var plan = GetMovePlans(team, newPieces, true, 1);
-                        plan.StartRow = positionMove.Row;
-                        plan.StartColumn = positionMove.Column;
-                        plan.Move = move;
-                        movePlans.Add(plan);
-                    }
+                    var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                    var plan = GetMovePlans(piecesClone, _planDepth, Int32.MinValue, Int32.MaxValue, !team);
+                    plan.StartRow = positionMove.Row;
+                    plan.StartColumn = positionMove.Column;
+                    plan.Move = move;
+                    movePlans.Add(plan);
                 }
             }
-            //TODO: Need a way to measure the length of a plan.
-			return movePlans.OrderByDescending(p => p.Wins / (p.Loses + p.Incomplete + p.Wins)).FirstOrDefault();
+            return movePlans.OrderByDescending(p => p.Heuristic).FirstOrDefault();
         }
 
-        public MovePlan GetMovePlans(bool team, Piece?[,] pieces, bool isOpponentTurn, int depth)
+        public MovePlan GetMovePlans(Piece?[,] pieces, int depth, int alpha, int beta, bool isMaximizing)
         {
-            var opponent = !team;
-            var finder = new LegalMoveFinder(pieces);
-            var status = new GameStatus(pieces);
-			var loses = 0;
-			var wins = 0;
-			var incomplete = 0;
-            foreach (var positionMove in finder.GetLegalMoves(isOpponentTurn ? opponent : team))
+            var board = new GameStatus(pieces);
+            if (board.Winner == isMaximizing)
+                return new MovePlan() { Heuristic = -WinHeuristic };
+            if (board.Winner == !isMaximizing)
+                return new MovePlan() { Heuristic = WinHeuristic };
+            if (depth == 0)
+                return new MovePlan() { Heuristic = GetHeuristic(pieces) };
+            if (isMaximizing)
             {
-                foreach (var move in positionMove.Moves)
+                var finder = new LegalMoveFinder(pieces);
+                foreach (var positionMove in finder.GetLegalMoves(isMaximizing))
                 {
-                    var newPieces = status.CloneAndMove(positionMove.Row, positionMove.Column, move);
-                    var newBoard = new GameStatus(newPieces);
-                    if (newBoard.Winner == opponent)
-                        ++loses;
-                    else if (newBoard.Winner == team && !isOpponentTurn)
-                        return new MovePlan()
-                        {
-                            StartRow = positionMove.Row,
-                            StartColumn = positionMove.Column,
-                            Move = move,
-                            Wins = 1
-                        };
-                    else if (depth == MovePlan.MAX_DEPTH)
-                        ++incomplete;
-					else
+                    foreach (var move in positionMove.Moves)
                     {
-                        MovePlan plan = GetMovePlans(team, newPieces, !isOpponentTurn, depth + 1);
-                        if (!isOpponentTurn && plan.Loses == 0 && plan.Incomplete == 0 && plan.Wins > 0)
-                            return new MovePlan()
-                            {
-                                StartRow = positionMove.Row,
-                                StartColumn = positionMove.Column,
-                                Move = move,
-                                Wins = plan.Wins
-                            };
-                        loses += plan.Loses;
-                        wins += plan.Wins;
-                        incomplete += plan.Incomplete;
+                        var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                        var potentialPlan = GetMovePlans(piecesClone, depth - 1, alpha, beta, !isMaximizing);
+                        alpha = Math.Max(alpha, potentialPlan.Heuristic);
+						if (beta <= alpha)
+							return new MovePlan() { Heuristic = alpha };
                     }
                 }
+                return new MovePlan() { Heuristic = alpha };
             }
-            return new MovePlan() { Incomplete = incomplete, Wins = wins, Loses = loses };
+            else
+            {
+                var finder = new LegalMoveFinder(pieces);
+                foreach (var positionMove in finder.GetLegalMoves(isMaximizing))
+                {
+                    foreach (var move in positionMove.Moves)
+                    {
+                        var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                        var potentialPlan = GetMovePlans(piecesClone, depth - 1, alpha, beta, !isMaximizing);
+                        beta = Math.Min(beta, potentialPlan.Heuristic);
+                        if (beta <= alpha)
+                            return new MovePlan() { Heuristic = beta };
+                    }
+                }
+                return new MovePlan() { Heuristic = beta };
+            }
+        }
+
+        private int GetHeuristic(Piece?[,] pieces)
+        {
+			var heuristic = 0;
+            for (var r = 0; r <= LegalMoveFinder.MAX_POSITION; ++r)
+                for (var c = 0; c <= LegalMoveFinder.MAX_POSITION; ++c)
+					if (pieces[r,c].HasValue)
+                        heuristic += PieceUtil.OnDownTeam(pieces[r, c].Value) ? 1 : -1;
+            return heuristic;
         }
 	}
 }
