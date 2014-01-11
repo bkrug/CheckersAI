@@ -7,7 +7,7 @@ namespace CheckersAI.Models
 {
     public class MovePlan
     {
-        public const int MAX_DEPTH = 3;
+        public const int MAX_DEPTH = 6;
         public int StartRow;
         public int StartColumn;
         public Move Move { get; set; }

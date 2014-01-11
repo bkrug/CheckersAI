@@ -65,24 +65,182 @@ namespace CheckersAI.Tests
                 var actualMove = planner.GetNextMove(true);
                 CompareRecommendedMoves(expectedMove, actualMove, "One-to-one wind.");
             }
-            //{
-            //    var pieces = new Piece?[8, 8];
-            //    pieces[2, 4] = Piece.DOWN_TEAM;
-            //    pieces[3, 1] = Piece.DOWN_TEAM;
-            //    pieces[5, 3] = Piece.UP_TEAM;
-            //    var planner = new MovePlanner(pieces);
-            //    var expectedMove = new RecommendedMove()
-            //    {
-            //        Row = 2,
-            //        Column = 4,
-            //        Move = new Move()
-            //        {
-            //            Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
-            //        }
-            //    };
-            //    var actualMove = planner.GetNextMove(true);
-            //    CompareRecommendedMoves(expectedMove, actualMove, "One-to-one wind.");
-            //}
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[3, 1] = Piece.DOWN_TEAM;
+                pieces[5, 3] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces);
+                var okMoves = new List<MovePlan>();
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                var actualMove = planner.GetNextMove(true);
+                var matchFound = false;
+                foreach(var move in okMoves) {
+                    if (AreMatches(move, actualMove))
+                        matchFound = true;
+                }
+                Assert.IsTrue(matchFound, "Two-to-one win.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[2, 6] = Piece.DOWN_TEAM;
+                pieces[3, 1] = Piece.DOWN_TEAM;
+                pieces[5, 3] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces);
+                var okMoves = new List<MovePlan>();
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 6,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Wins = 2,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                var actualMove = planner.GetNextMove(true);
+                var matchFound = false;
+                foreach (var move in okMoves)
+                {
+                    if (AreMatches(move, actualMove))
+                        matchFound = true;
+                }
+                Assert.IsTrue(matchFound, "Three-to-one win.");
+            }
+        }
+
+        //This test fails because the tested method returns a winning move, but a longer path to a winning move.
+        //I won't fix the method, because I'm going to redo the AI.
+        [TestMethod]
+        public void Planner_GetNextMove_ThreeTurns()
+        {
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[2, 0] = Piece.DOWN_TEAM;
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[2, 6] = Piece.DOWN_TEAM;
+                pieces[6, 4] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces);
+                var okMoves = new List<MovePlan>();
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 0,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Wins = 4,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 4,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Wins = 4,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 6,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Wins = 4,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 6,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Wins = 4,
+                    Loses = 0,
+                    Incomplete = 0
+                });
+                var actualMove = planner.GetNextMove(true);
+                var matchFound = false;
+                foreach (var move in okMoves)
+                {
+                    if (AreMatches(move, actualMove))
+                        matchFound = true;
+                }
+                Assert.IsTrue(matchFound, "Three-to-one win.");
+            }
         }
 
         private void CompareRecommendedMoves(MovePlan expected, MovePlan actual, string message)
@@ -119,6 +277,41 @@ namespace CheckersAI.Tests
                 Assert.IsTrue(true, message);
             else
                 Assert.Fail("Expected " + expected.ToString() + " but actual " + actual.ToString() + " " + message);
+        }
+
+        private bool AreMatches(MovePlan expected, MovePlan actual)
+        {
+            if (expected.StartRow != actual.StartRow)
+                return false;
+            if (expected.StartColumn != actual.StartColumn)
+                return false;
+            if (expected.Wins != actual.Wins)
+                return false;
+            if (expected.Loses != actual.Loses)
+                return false;
+            if (expected.Incomplete != actual.Incomplete)
+                return false;
+            return AreMatches(expected.Move, actual.Move);
+        }
+
+        private bool AreMatches(Move expected, Move actual)
+        {
+            var isMatch = true;
+            if (expected.Steps.Count == actual.Steps.Count)
+            {
+                for (var i = 0; i < expected.Steps.Count && isMatch; ++i)
+                {
+                    isMatch =
+                        expected.Steps[i].Direction == actual.Steps[i].Direction
+                        && expected.Steps[i].Jump == actual.Steps[i].Jump;
+                }
+            }
+            else
+                isMatch = false;
+            if (isMatch)
+                return true;
+            else
+                return false;
         }
     }
 }

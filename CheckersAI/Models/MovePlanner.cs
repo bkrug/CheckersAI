@@ -43,9 +43,7 @@ namespace CheckersAI.Models
                 }
             }
             //TODO: Need a way to measure the length of a plan.
-			return movePlans
-                .OrderBy(p => p.Incomplete == 0 && p.Loses == 0 ? 1 : 2)
-                .ThenBy(p => (p.Loses + p.Incomplete == 0) ? 0 : p.Wins / (p.Loses + p.Incomplete)).FirstOrDefault();
+			return movePlans.OrderByDescending(p => p.Wins / (p.Loses + p.Incomplete + p.Wins)).FirstOrDefault();
         }
 
         public MovePlan GetMovePlans(bool team, Piece?[,] pieces, bool isOpponentTurn, int depth)
@@ -74,9 +72,17 @@ namespace CheckersAI.Models
                         };
                     else if (depth == MovePlan.MAX_DEPTH)
                         ++incomplete;
-                    else
+					else
                     {
                         MovePlan plan = GetMovePlans(team, newPieces, !isOpponentTurn, depth + 1);
+                        if (!isOpponentTurn && plan.Loses == 0 && plan.Incomplete == 0 && plan.Wins > 0)
+                            return new MovePlan()
+                            {
+                                StartRow = positionMove.Row,
+                                StartColumn = positionMove.Column,
+                                Move = move,
+                                Wins = plan.Wins
+                            };
                         loses += plan.Loses;
                         wins += plan.Wins;
                         incomplete += plan.Incomplete;
