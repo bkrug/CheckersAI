@@ -45,9 +45,10 @@ namespace CheckersAI.Models
         public MovePlan GetMovePlans(Piece?[,] pieces, int depth, int alpha, int beta, bool isMaximizing)
         {
             var board = new GameStatus(pieces);
-            if (board.Winner == true)
+            var winner = board.WinnerByElimination;
+            if (winner == true)
                 return new MovePlan() { Heuristic = WinHeuristic };
-            if (board.Winner == false)
+            if (winner == false)
                 return new MovePlan() { Heuristic = -WinHeuristic };
             if (depth == 0)
                 return new MovePlan() { Heuristic = GetHeuristic(pieces) };

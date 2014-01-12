@@ -96,6 +96,110 @@ namespace CheckersAI.Tests
         }
 
         [TestMethod]
+        public void Planner_WinByGridlock()
+        {
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[5, 5] = Piece.DOWN_TEAM;
+                pieces[5, 7] = Piece.DOWN_TEAM;
+                pieces[7, 5] = Piece.DOWN_TEAM_KING;
+                pieces[7, 7] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 6);
+                var okMoves = new List<MovePlan>();
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 7,
+                    StartColumn = 5,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 5,
+                    StartColumn = 7,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                });
+                var actualMove = planner.GetNextMove(true);
+                var matchFound = false;
+                foreach (var move in okMoves)
+                {
+                    if (AreMatches(move, actualMove))
+                        matchFound = true;
+                }
+                Assert.IsTrue(matchFound, "Down team won by gridlock in one move.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[2, 6] = Piece.DOWN_TEAM;
+                pieces[3, 5] = Piece.DOWN_TEAM;
+                pieces[4, 4] = Piece.DOWN_TEAM;
+                pieces[5, 5] = Piece.DOWN_TEAM_KING;
+                pieces[6, 6] = Piece.UP_TEAM;
+                pieces[7, 7] = Piece.DOWN_TEAM;
+                var planner = new MovePlanner(pieces, 6);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 2,
+                    StartColumn = 6,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, "Down wins by gridlock in two turns.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[3, 5] = Piece.DOWN_TEAM;
+                pieces[3, 7] = Piece.DOWN_TEAM;
+                pieces[4, 4] = Piece.DOWN_TEAM;
+                pieces[5, 5] = Piece.DOWN_TEAM_KING;
+                pieces[5, 7] = Piece.UP_TEAM;
+                pieces[7, 7] = Piece.DOWN_TEAM;
+                var planner = new MovePlanner(pieces, 6);
+                var okMoves = new List<MovePlan>();
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 5,
+                    StartColumn = 5,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                });
+                okMoves.Add(new MovePlan()
+                {
+                    StartRow = 3,
+                    StartColumn = 7,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+
+                });
+                var actualMove = planner.GetNextMove(true);
+                var matchFound = false;
+                foreach (var move in okMoves)
+                {
+                    if (AreMatches(move, actualMove))
+                        matchFound = true;
+                }
+                Assert.IsTrue(matchFound, "Down team won by gridlock in one move.");
+            }
+        }
+
+        [TestMethod]
         public void Planner_GetNextMove_TwoTurn()
         {
             {
@@ -450,6 +554,40 @@ namespace CheckersAI.Tests
                 return true;
             else
                 return false;
+        }
+
+        [TestMethod]
+        public void Planner_GetNextMove_GameStart()
+        {
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[0, 1] = Piece.DOWN_TEAM;
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM;
+                pieces[0, 7] = Piece.DOWN_TEAM;
+                pieces[1, 0] = Piece.DOWN_TEAM;
+                pieces[1, 2] = Piece.DOWN_TEAM;
+                pieces[1, 4] = Piece.DOWN_TEAM;
+                pieces[1, 6] = Piece.DOWN_TEAM;
+                pieces[2, 1] = Piece.DOWN_TEAM;
+                pieces[2, 3] = Piece.DOWN_TEAM;
+                pieces[2, 5] = Piece.DOWN_TEAM;
+                pieces[2, 7] = Piece.DOWN_TEAM;
+                pieces[5, 0] = Piece.UP_TEAM;
+                pieces[5, 2] = Piece.UP_TEAM;
+                pieces[5, 4] = Piece.UP_TEAM;
+                pieces[5, 6] = Piece.UP_TEAM;
+                pieces[6, 1] = Piece.UP_TEAM;
+                pieces[6, 3] = Piece.UP_TEAM;
+                pieces[6, 5] = Piece.UP_TEAM;
+                pieces[6, 7] = Piece.UP_TEAM;
+                pieces[7, 0] = Piece.UP_TEAM;
+                pieces[7, 2] = Piece.UP_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
+                pieces[7, 6] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 7);
+                var nextMove = planner.GetNextMove(true);
+            }
         }
     }
 }
