@@ -14,31 +14,85 @@ namespace CheckersAI.Tests
         [TestMethod]
         public void Planner_GetNextMove_OneTurn()
         {
-            var pieces = new Piece?[8, 8];
-            pieces[4, 3] = Piece.DOWN_TEAM;
-            pieces[5, 4] = Piece.UP_TEAM;
-            var planner = new MovePlanner(pieces, _lowPlanDepth);
-            var expectedMoveForDown = new MovePlan()
             {
-                StartRow = 4,
-                StartColumn = 3,
-                Move = new Move() { Steps = new List<MoveStep>() { 
-                    new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } } },
-                Heuristic = MovePlanner.WinHeuristic
-            };
-            var expectedMoveForUp = new MovePlan()
-            {
-                StartRow = 5,
-                StartColumn = 4,
-                Move = new Move() { Steps = new List<MoveStep>() { 
+                var pieces = new Piece?[8, 8];
+                pieces[4, 3] = Piece.DOWN_TEAM;
+                pieces[5, 4] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
+                var expectedMoveForDown = new MovePlan()
+                {
+                    StartRow = 4,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { 
+                    new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                };
+                var expectedMoveForUp = new MovePlan()
+                {
+                    StartRow = 5,
+                    StartColumn = 4,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { 
                     new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = true } }
-                },
-                Heuristic = MovePlanner.WinHeuristic
-            };
-            var actualDownMove = planner.GetNextMove(true);
-            CompareRecommendedMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
-            var actualUpMove = planner.GetNextMove(false);
-            CompareRecommendedMoves(expectedMoveForUp, actualUpMove, "Up should win in one move.");
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                };
+                var actualDownMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMoveForDown, actualDownMove, "Down should win in one move.");
+                var actualUpMove = planner.GetNextMove(false);
+                CompareRecommendedMoves(expectedMoveForUp, actualUpMove, "Up should win in one move.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 2);
+                var actualMove = planner.GetNextMove(true);
+                Assert.AreEqual(0, actualMove.Heuristic, "No winner. Not enough time.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[1, 2] = Piece.UP_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 2);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 0,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true } }
+                    },
+                    Heuristic = 0
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, "No winner. But captured one piece.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM; 
+                pieces[1, 2] = Piece.UP_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 2);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 0,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true } }
+                    },
+                    Heuristic = 1
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, "No winner. But captured one piece making a gain.");
+            }
         }
 
         [TestMethod]
@@ -215,6 +269,86 @@ namespace CheckersAI.Tests
                         matchFound = true;
                 }
                 Assert.IsTrue(matchFound, "Three-to-one win.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[1, 3] = Piece.DOWN_TEAM;
+                pieces[1, 5] = Piece.DOWN_TEAM;
+                pieces[4, 2] = Piece.UP_TEAM;
+                pieces[7, 5] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 4);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 1,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Heuristic = 0
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, " Down should be able to block but not capture one piece.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[1, 3] = Piece.DOWN_TEAM;
+                pieces[1, 5] = Piece.DOWN_TEAM;
+                pieces[4, 2] = Piece.UP_TEAM;
+                pieces[7, 5] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 1,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                    },
+                    Heuristic = 1
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, " Down should be able to block but not capture one piece.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[1, 3] = Piece.DOWN_TEAM;
+                pieces[1, 5] = Piece.DOWN_TEAM;
+                pieces[2, 2] = Piece.UP_TEAM;
+                pieces[7, 5] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, 4);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 1,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true } }
+                    },
+                    Heuristic = 1
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, " Down should be able to capture one piece and one is left behind.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                pieces[1, 3] = Piece.DOWN_TEAM;
+                pieces[1, 5] = Piece.DOWN_TEAM;
+                pieces[2, 2] = Piece.UP_TEAM;
+                pieces[7, 5] = Piece.UP_TEAM;
+                var planner = new MovePlanner(pieces, _lowPlanDepth);
+                var expectedMove = new MovePlan()
+                {
+                    StartRow = 1,
+                    StartColumn = 3,
+                    Move = new Move()
+                    {
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true } }
+                    },
+                    Heuristic = MovePlanner.WinHeuristic
+                };
+                var actualMove = planner.GetNextMove(true);
+                CompareRecommendedMoves(expectedMove, actualMove, " Down should be able to capture one piece and one is left behind.");
             }
         }
 

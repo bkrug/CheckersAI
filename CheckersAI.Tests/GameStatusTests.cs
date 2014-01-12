@@ -29,6 +29,14 @@ namespace CheckersAI.Tests
                 pieces[2, 1] = Piece.UP_TEAM;
                 Assert.AreEqual(false, status1.WinnerByElimination, "DownBoundTeam is calculated as loser.");
             }
+            {
+                var pieces = new Piece?[8, 8];
+                var status1 = new GameStatus(pieces);
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[3, 1] = Piece.DOWN_TEAM;
+                pieces[5, 7] = Piece.UP_TEAM;
+                Assert.AreEqual(null, status1.WinnerByElimination, "No team is winner.");
+            }
         }
 
         [TestMethod]
@@ -55,6 +63,14 @@ namespace CheckersAI.Tests
                 pieces[4, 5] = Piece.DOWN_TEAM;
                 var status1 = new GameStatus(pieces);
                 Assert.AreEqual(true, status1.WinnerByGridlock, "UpBoundTeam is calculated as winner.");
+            }
+            {
+                var pieces = new Piece?[8, 8];
+                var status1 = new GameStatus(pieces);
+                pieces[2, 4] = Piece.DOWN_TEAM;
+                pieces[3, 1] = Piece.DOWN_TEAM;
+                pieces[5, 7] = Piece.UP_TEAM;
+                Assert.AreEqual(null, status1.WinnerByGridlock, "No team is winner.");
             }
         }
 

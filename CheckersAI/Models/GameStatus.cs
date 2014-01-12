@@ -40,7 +40,7 @@ namespace CheckersAI.Models
                             ++downPieces;
                         else
                             ++upPieces;
-                    if (c == LegalMoveFinder.MAX_POSITION)
+                    if (c > LegalMoveFinder.MAX_POSITION)
                     {
                         c = 0;
                         ++r;
@@ -73,7 +73,7 @@ namespace CheckersAI.Models
                         else
                             upMoves += moveFinder.GetLegalMoves(r, c).Count();
                     ++c;
-                    if (c == LegalMoveFinder.MAX_POSITION)
+                    if (c > LegalMoveFinder.MAX_POSITION)
                     {
                         c = 0;
                         ++r;
