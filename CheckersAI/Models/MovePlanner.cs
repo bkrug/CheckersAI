@@ -38,16 +38,17 @@ namespace CheckersAI.Models
                     movePlans.Add(plan);
                 }
             }
-            return movePlans.OrderByDescending(p => p.Heuristic).FirstOrDefault();
+            return team ? movePlans.OrderByDescending(p => p.Heuristic).FirstOrDefault() 
+						: movePlans.OrderBy(p => p.Heuristic).FirstOrDefault();
         }
 
         public MovePlan GetMovePlans(Piece?[,] pieces, int depth, int alpha, int beta, bool isMaximizing)
         {
             var board = new GameStatus(pieces);
-            if (board.Winner == isMaximizing)
-                return new MovePlan() { Heuristic = -WinHeuristic };
-            if (board.Winner == !isMaximizing)
+            if (board.Winner == true)
                 return new MovePlan() { Heuristic = WinHeuristic };
+            if (board.Winner == false)
+                return new MovePlan() { Heuristic = -WinHeuristic };
             if (depth == 0)
                 return new MovePlan() { Heuristic = GetHeuristic(pieces) };
             if (isMaximizing)
