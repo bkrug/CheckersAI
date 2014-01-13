@@ -100,29 +100,29 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece?[8, 8];
-                pieces[5, 5] = Piece.DOWN_TEAM;
-                pieces[5, 7] = Piece.DOWN_TEAM;
-                pieces[7, 5] = Piece.DOWN_TEAM_KING;
-                pieces[7, 7] = Piece.UP_TEAM;
+                pieces[5, 0] = Piece.DOWN_TEAM;
+                pieces[5, 2] = Piece.DOWN_TEAM;
+                pieces[7, 0] = Piece.UP_TEAM;
+                pieces[7, 2] = Piece.DOWN_TEAM_KING;
                 var planner = new MovePlanner(pieces, 6);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
                     StartRow = 7,
-                    StartColumn = 5,
+                    StartColumn = 2,
                     Move = new Move()
                     {
-                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_RIGHT, Jump = false } }
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.UP_LEFT, Jump = false } }
                     },
                     Heuristic = MovePlanner.WinHeuristic
                 });
                 okMoves.Add(new MovePlan()
                 {
                     StartRow = 5,
-                    StartColumn = 7,
+                    StartColumn = 0,
                     Move = new Move()
                     {
-                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = false } }
+                        Steps = new List<MoveStep>() { new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = false } }
                     },
                     Heuristic = MovePlanner.WinHeuristic
                 });
@@ -137,16 +137,16 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[2, 6] = Piece.DOWN_TEAM;
-                pieces[3, 5] = Piece.DOWN_TEAM;
-                pieces[4, 4] = Piece.DOWN_TEAM;
-                pieces[5, 5] = Piece.DOWN_TEAM_KING;
-                pieces[6, 6] = Piece.UP_TEAM;
-                pieces[7, 7] = Piece.DOWN_TEAM;
+                pieces[1, 6] = Piece.DOWN_TEAM;
+                pieces[2, 5] = Piece.DOWN_TEAM;
+                pieces[3, 4] = Piece.DOWN_TEAM;
+                pieces[4, 5] = Piece.DOWN_TEAM_KING;
+                pieces[5, 6] = Piece.UP_TEAM;
+                pieces[6, 7] = Piece.DOWN_TEAM;
                 var planner = new MovePlanner(pieces, 6);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 6,
                     Move = new Move()
                     {
@@ -159,17 +159,17 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[3, 5] = Piece.DOWN_TEAM;
-                pieces[3, 7] = Piece.DOWN_TEAM;
-                pieces[4, 4] = Piece.DOWN_TEAM;
-                pieces[5, 5] = Piece.DOWN_TEAM_KING;
-                pieces[5, 7] = Piece.UP_TEAM;
-                pieces[7, 7] = Piece.DOWN_TEAM;
+                pieces[2, 5] = Piece.DOWN_TEAM;
+                pieces[2, 7] = Piece.DOWN_TEAM;
+                pieces[3, 4] = Piece.DOWN_TEAM;
+                pieces[4, 5] = Piece.DOWN_TEAM_KING;
+                pieces[4, 7] = Piece.UP_TEAM;
+                pieces[6, 7] = Piece.DOWN_TEAM;
                 var planner = new MovePlanner(pieces, 6);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 5,
+                    StartRow = 4,
                     StartColumn = 5,
                     Move = new Move()
                     {
@@ -179,7 +179,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 3,
+                    StartRow = 2,
                     StartColumn = 7,
                     Move = new Move()
                     {
@@ -204,12 +204,12 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece?[8, 8];
-                pieces[2, 4] = Piece.DOWN_TEAM;
-                pieces[5, 3] = Piece.UP_TEAM;
+                pieces[3, 4] = Piece.DOWN_TEAM;
+                pieces[6, 3] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -222,14 +222,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[2, 4] = Piece.DOWN_TEAM;
-                pieces[3, 1] = Piece.DOWN_TEAM;
-                pieces[5, 3] = Piece.UP_TEAM;
+                pieces[3, 4] = Piece.DOWN_TEAM;
+                pieces[4, 1] = Piece.DOWN_TEAM;
+                pieces[6, 3] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -239,7 +239,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -257,15 +257,15 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[2, 4] = Piece.DOWN_TEAM;
-                pieces[2, 6] = Piece.DOWN_TEAM;
-                pieces[3, 1] = Piece.DOWN_TEAM;
-                pieces[5, 3] = Piece.UP_TEAM;
+                pieces[3, 4] = Piece.DOWN_TEAM;
+                pieces[3, 6] = Piece.DOWN_TEAM;
+                pieces[4, 1] = Piece.DOWN_TEAM;
+                pieces[6, 3] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 6,
                     Move = new Move()
                     {
@@ -275,7 +275,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -285,7 +285,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 3,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -309,15 +309,15 @@ namespace CheckersAI.Tests
         {
             {
                 var pieces = new Piece?[8, 8];
-                pieces[2, 0] = Piece.DOWN_TEAM;
-                pieces[2, 4] = Piece.DOWN_TEAM;
-                pieces[2, 6] = Piece.DOWN_TEAM;
-                pieces[6, 4] = Piece.UP_TEAM;
+                pieces[1, 0] = Piece.DOWN_TEAM;
+                pieces[1, 4] = Piece.DOWN_TEAM;
+                pieces[1, 6] = Piece.DOWN_TEAM;
+                pieces[5, 4] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 0,
                     Move = new Move()
                     {
@@ -327,7 +327,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -337,7 +337,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -347,7 +347,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 6,
                     Move = new Move()
                     {
@@ -357,7 +357,7 @@ namespace CheckersAI.Tests
                 });
                 okMoves.Add(new MovePlan()
                 {
-                    StartRow = 2,
+                    StartRow = 1,
                     StartColumn = 6,
                     Move = new Move()
                     {
@@ -376,14 +376,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[1, 3] = Piece.DOWN_TEAM;
-                pieces[1, 5] = Piece.DOWN_TEAM;
-                pieces[4, 2] = Piece.UP_TEAM;
-                pieces[7, 5] = Piece.UP_TEAM;
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM;
+                pieces[3, 2] = Piece.UP_TEAM;
+                pieces[6, 5] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, 4);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 1,
+                    StartRow = 0,
                     StartColumn = 3,
                     Move = new Move()
                     {
@@ -396,14 +396,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[1, 3] = Piece.DOWN_TEAM;
-                pieces[1, 5] = Piece.DOWN_TEAM;
-                pieces[4, 2] = Piece.UP_TEAM;
-                pieces[7, 5] = Piece.UP_TEAM;
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM;
+                pieces[3, 2] = Piece.UP_TEAM;
+                pieces[6, 5] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 1,
+                    StartRow = 0,
                     StartColumn = 3,
                     Move = new Move()
                     {
@@ -416,14 +416,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[1, 3] = Piece.DOWN_TEAM;
-                pieces[1, 5] = Piece.DOWN_TEAM;
-                pieces[2, 2] = Piece.UP_TEAM;
-                pieces[7, 5] = Piece.UP_TEAM;
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM;
+                pieces[1, 2] = Piece.UP_TEAM;
+                pieces[6, 5] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, 4);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 1,
+                    StartRow = 0,
                     StartColumn = 3,
                     Move = new Move()
                     {
@@ -436,14 +436,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[1, 3] = Piece.DOWN_TEAM;
-                pieces[1, 5] = Piece.DOWN_TEAM;
-                pieces[2, 2] = Piece.UP_TEAM;
-                pieces[7, 5] = Piece.UP_TEAM;
+                pieces[0, 3] = Piece.DOWN_TEAM;
+                pieces[0, 5] = Piece.DOWN_TEAM;
+                pieces[1, 2] = Piece.UP_TEAM;
+                pieces[6, 5] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 1,
+                    StartRow = 0,
                     StartColumn = 3,
                     Move = new Move()
                     {
@@ -456,14 +456,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[0, 2] = Piece.DOWN_TEAM;
-                pieces[5, 5] = Piece.DOWN_TEAM;
-                pieces[6, 2] = Piece.UP_TEAM;
-                pieces[6, 4] = Piece.UP_TEAM;
+                pieces[1, 2] = Piece.DOWN_TEAM;
+                pieces[6, 5] = Piece.DOWN_TEAM;
+                pieces[7, 2] = Piece.UP_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, 4);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 6,
+                    StartRow = 7,
                     StartColumn = 4,
                     Move = new Move()
                     {
@@ -476,14 +476,14 @@ namespace CheckersAI.Tests
             }
             {
                 var pieces = new Piece?[8, 8];
-                pieces[0, 2] = Piece.DOWN_TEAM;
-                pieces[5, 5] = Piece.DOWN_TEAM;
-                pieces[6, 2] = Piece.UP_TEAM;
-                pieces[6, 4] = Piece.UP_TEAM;
+                pieces[1, 2] = Piece.DOWN_TEAM;
+                pieces[6, 5] = Piece.DOWN_TEAM;
+                pieces[7, 2] = Piece.UP_TEAM;
+                pieces[7, 4] = Piece.UP_TEAM;
                 var planner = new MovePlanner(pieces, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
-                    StartRow = 6,
+                    StartRow = 7,
                     StartColumn = 4,
                     Move = new Move()
                     {

@@ -5,7 +5,12 @@ using System.Web;
 
 namespace CheckersAI.Models
 {
-    public class GameBoard
+    public interface IGameBoard
+    {
+        void MovePiece(int row, int column, Move move);
+    }
+
+    public class GameBoard : IGameBoard
     {
         private Piece?[,] _pieces;
 
@@ -19,6 +24,10 @@ namespace CheckersAI.Models
             get { return _pieces[r, c]; }
             set
             {
+                if (r < LegalMoveFinder.MIN_POSITION || r > LegalMoveFinder.MAX_POSITION || c < LegalMoveFinder.MIN_POSITION || c > LegalMoveFinder.MAX_POSITION)
+                    throw new OffBoardException(r, c);
+                if (c % 2 == r % 2)
+                    throw new InvalidPositionException(r, c);
                 if (_pieces[r,c].HasValue)
                     if (PieceUtil.OnDownTeam(_pieces[r,c].Value))
                         --DownPieces;
@@ -67,6 +76,18 @@ namespace CheckersAI.Models
                             ++DownPieces;
                         else
                             ++UpPieces;                    
+        }
+
+        public void Reset()
+        {
+            for (var r = 0; r < 3; ++r)
+                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; ++c)
+                    this[r, c] = Piece.DOWN_TEAM;
+            for (var r = 5; r <= LegalMoveFinder.MAX_POSITION; ++r)
+                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; ++c)
+                    this[r, c] = Piece.UP_TEAM;
+            UpPieces = 12;
+            DownPieces = 12;
         }
 
         public bool? Winner

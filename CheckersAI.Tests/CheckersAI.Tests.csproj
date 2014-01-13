@@ -104,6 +104,7 @@
     <Compile Include="BoardPositionTests.cs" />
     <Compile Include="GameBoardTests.cs" />
     <Compile Include="MovePlannerTests.cs" />
+    <Compile Include="BoardControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

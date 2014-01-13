@@ -263,5 +263,76 @@ namespace CheckersAI.Tests
             Assert.AreNotSame(workerBoard, actualBoard, "Method cloned the board.");
             CompareBoards(expectedBord, actualBoard, "Movement was made on the cloned board.");
         }
+
+        [TestMethod]
+        public void Position_Legal()
+        {
+            var i = 0;
+            var board = new GameBoard();
+            var p1 = board[0, 1];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p2 = board[0, 7];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p3 = board[0, 3];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p4 = board[1, 2];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p5 = board[1, 6];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p6 = board[2, 5];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p7 = board[2, 7];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p8 = board[3, 4];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p9 = board[6, 3];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p10 = board[6, 7];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+            var p11 = board[7, 2];
+            Assert.IsTrue(true, "Position " + (++i) + " is valid.");
+        }
+
+        [TestMethod]
+        public void Position_NotLegal() 
+        {
+            var offboard = new[] { new[] { 0, -4 }, new[] { -9, 3 }, new[] { 5, 9 }, new[] { 8, 4 }, new[] { -2, -4 }, new[] { -1, 9 }, new[] { 8, -4 } };
+            var onboard = new[] { new[] { 0, 4 }, new[] { 3, 5 }, new[] { 7, 5 }, new[] { 6, 2 } };
+
+            var board = new GameBoard();
+            for (var i = 0; i < offboard.Length; ++i) 
+            {
+                try
+                {
+                    board[offboard[i][0], offboard[i][1]] = null;
+                    Assert.Fail("Board Position " + offboard[i][0] + ", " + offboard[i][1] + " should fail since it is off the board");
+                }
+                catch (OffBoardException ex)
+                {
+                    Assert.IsTrue(true, "Board Position " + offboard[i][0] + ", " + offboard[i][1] + " fails since it is off the board");
+                }
+                catch (ApplicationException ex)
+                {
+                    Assert.Fail("When creating Board Position " + offboard[i][0] + ", " + offboard[i][1] + " wrong exception occurred.");
+                }
+            }
+            for (var i = 0; i < onboard.Length; ++i)
+            {
+                try
+                {
+                    board[onboard[i][0], onboard[i][1]] = null;
+                    Assert.Fail("Board Position " + onboard[i][0] + ", " + onboard[i][1] + " should fail since it is invalid.");
+                }
+                catch (InvalidPositionException ex)
+                {
+                    Assert.IsTrue(true, "Board Position " + offboard[i][0] + ", " + offboard[i][1] + " fails since it is invalid.");
+                }
+                catch (ApplicationException ex)
+                {
+                    Assert.Fail("When creating Board Position " + offboard[i][0] + ", " + offboard[i][1] + " wrong exception occurred.");
+                }
+            }
+        }
+
     }
 }
