@@ -23,15 +23,15 @@ namespace CheckersAI.Models
 
 		//TODO: A unit test will end up testing other methods as well as this one.
         public MovePlan GetNextMove(bool team) {
-            var finder = new LegalMoveFinder(_pieces);
-            var board = new GameStatus(_pieces);
+            var board = new GameBoard(_pieces);
+            var finder = new LegalMoveFinder(board);
             var movePlans = new List<MovePlan>();
             foreach (var positionMove in finder.GetLegalMoves(team))
             {
                 foreach (var move in positionMove.Moves)
                 {
-                    var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
-                    var plan = GetMovePlans(piecesClone, _planDepth, Int32.MinValue, Int32.MaxValue, !team);
+                    var newBoard = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                    var plan = GetMovePlans(newBoard, _planDepth, Int32.MinValue, Int32.MaxValue, !team);
                     plan.StartRow = positionMove.Row;
                     plan.StartColumn = positionMove.Column;
                     plan.Move = move;
@@ -42,25 +42,24 @@ namespace CheckersAI.Models
 						: movePlans.OrderBy(p => p.Heuristic).FirstOrDefault();
         }
 
-        public MovePlan GetMovePlans(Piece?[,] pieces, int depth, int alpha, int beta, bool isMaximizing)
+        public MovePlan GetMovePlans(GameBoard board, int depth, int alpha, int beta, bool isMaximizing)
         {
-            var board = new GameStatus(pieces);
             var winner = board.WinnerByElimination;
             if (winner == true)
                 return new MovePlan() { Heuristic = WinHeuristic };
             if (winner == false)
                 return new MovePlan() { Heuristic = -WinHeuristic };
             if (depth == 0)
-                return new MovePlan() { Heuristic = GetHeuristic(pieces) };
+                return new MovePlan() { Heuristic = GetHeuristic(board) };
             if (isMaximizing)
             {
-                var finder = new LegalMoveFinder(pieces);
+                var finder = new LegalMoveFinder(board);
                 foreach (var positionMove in finder.GetLegalMoves(isMaximizing))
                 {
                     foreach (var move in positionMove.Moves)
                     {
-                        var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
-                        var potentialPlan = GetMovePlans(piecesClone, depth - 1, alpha, beta, !isMaximizing);
+                        var newBoard = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                        var potentialPlan = GetMovePlans(newBoard, depth - 1, alpha, beta, !isMaximizing);
                         alpha = Math.Max(alpha, potentialPlan.Heuristic);
 						if (beta <= alpha)
 							return new MovePlan() { Heuristic = alpha };
@@ -70,13 +69,13 @@ namespace CheckersAI.Models
             }
             else
             {
-                var finder = new LegalMoveFinder(pieces);
+                var finder = new LegalMoveFinder(board);
                 foreach (var positionMove in finder.GetLegalMoves(isMaximizing))
                 {
                     foreach (var move in positionMove.Moves)
                     {
-                        var piecesClone = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
-                        var potentialPlan = GetMovePlans(piecesClone, depth - 1, alpha, beta, !isMaximizing);
+                        var newBoard = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                        var potentialPlan = GetMovePlans(newBoard, depth - 1, alpha, beta, !isMaximizing);
                         beta = Math.Min(beta, potentialPlan.Heuristic);
                         if (beta <= alpha)
                             return new MovePlan() { Heuristic = beta };
@@ -86,13 +85,9 @@ namespace CheckersAI.Models
             }
         }
 
-        private int GetHeuristic(Piece?[,] pieces)
+        private int GetHeuristic(GameBoard board)
         {
-			var heuristic = 0;
-            for (var r = 0; r <= LegalMoveFinder.MAX_POSITION; ++r)
-                for (var c = 0; c <= LegalMoveFinder.MAX_POSITION; ++c)
-					if (pieces[r,c].HasValue)
-                        heuristic += PieceUtil.OnDownTeam(pieces[r, c].Value) ? 1 : -1;
+			var heuristic = board.DownPieces - board.UpPieces;
             return heuristic;
         }
 	}

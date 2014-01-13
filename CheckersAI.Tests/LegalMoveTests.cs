@@ -97,7 +97,7 @@ namespace CheckersAI.Tests
 
         private void CompareMoves(Piece?[,] pieces, List<Move> expectedMoves, int row, int column)
         {
-            var legalMoveFinder = new LegalMoveFinder(pieces);
+            var legalMoveFinder = new LegalMoveFinder(new GameBoard(pieces));
             var legalMoves = legalMoveFinder.GetLegalMoves(row, column);
         }
 
@@ -471,7 +471,7 @@ namespace CheckersAI.Tests
                                                                 new MoveStep() { Direction = MoveDirection.DOWN_LEFT, Jump = true },
                                                                 new MoveStep() { Direction = MoveDirection.DOWN_RIGHT, Jump = true }}}
                 };
-                var legalMoveFinder = new LegalMoveFinder(pieces);
+                var legalMoveFinder = new LegalMoveFinder(new GameBoard(pieces));
                 var legalMoves = legalMoveFinder.GetLegalMoves(2, 3);
                 expectedMoves = SortMoves(expectedMoves);
                 legalMoves = SortMoves(legalMoves.Where(m => m.Steps.Count == 1 || m.Steps.Count == 7).ToList());
@@ -497,7 +497,7 @@ namespace CheckersAI.Tests
             pieces[2, 3] = Piece.DOWN_TEAM;
             pieces[7, 6] = Piece.DOWN_TEAM_KING;
             pieces[3, 4] = Piece.UP_TEAM;
-            var moveFinder = new LegalMoveFinder(pieces);
+            var moveFinder = new LegalMoveFinder(new GameBoard(pieces));
             var actual1 = moveFinder.GetLegalMoves(true);
             var expected1 = new List<PositionMoves>()
             {

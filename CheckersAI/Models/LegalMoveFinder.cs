@@ -7,15 +7,13 @@ namespace CheckersAI.Models
 {
     public class LegalMoveFinder
     {
-        private Piece?[,] _pieces; 
+        private GameBoard _pieces; 
         private LegalMoveFinder() { }
         public const int MIN_POSITION = 0;
         public const int MAX_POSITION = 7;
 
-        public LegalMoveFinder(Piece?[,] pieces)
+        public LegalMoveFinder(GameBoard pieces)
         {
-            if (pieces.Rank != 2 || pieces.GetLength(0) != MAX_POSITION + 1 || pieces.GetLength(1) != MAX_POSITION + 1)
-                throw new ApplicationException("Array of pieces must be 8x8.");
             _pieces = pieces;
         }
 
@@ -57,14 +55,14 @@ namespace CheckersAI.Models
             if (_pieces[row, column].HasValue)
             {
                 var piece = _pieces[row, column].Value;
-                var piecesClone = (Piece?[,])_pieces.Clone();
+                var piecesClone = _pieces.Clone();
                 piecesClone[row, column] = null;
                 return GetJumpingSteps(row, column, piece, new List<MoveStep>(), piecesClone);
             }
             return new List<Move>();
         }
 
-        private List<Move> GetJumpingSteps(int row, int column, Piece piece, List<MoveStep> moveSteps, Piece?[,] piecesClone)
+        private List<Move> GetJumpingSteps(int row, int column, Piece piece, List<MoveStep> moveSteps, GameBoard piecesClone)
         {
             var moves = new List<Move>();
             moves.AddRange( GetStepsInDirection(row, column, ForwardLeft(piece), piecesClone, piece, moveSteps) );
@@ -77,7 +75,7 @@ namespace CheckersAI.Models
             return moves;
         }
 
-        private List<Move> GetStepsInDirection(int row, int column, MoveDirection direction, Piece?[,] piecesClone, Piece piece, List<MoveStep> moveSteps)
+        private List<Move> GetStepsInDirection(int row, int column, MoveDirection direction, GameBoard piecesClone, Piece piece, List<MoveStep> moveSteps)
         {
             var moves = new List<Move>();
             int jumpToRow, jumpToColumn, captureRow, captureColumn;
@@ -94,7 +92,7 @@ namespace CheckersAI.Models
                     var move = new Move() { Steps = moveSteps.ToList() };
                     move.Steps.Add(new MoveStep() { Direction = direction, Jump = true });
                     moves.Add(move);
-                    var nextClone = (Piece?[,])piecesClone.Clone();
+                    var nextClone = piecesClone.Clone();
                     nextClone[captureRow, captureColumn] = null;
                     moves.AddRange(GetJumpingSteps(jumpToRow, jumpToColumn, piece, move.Steps, nextClone));
                     return moves;
