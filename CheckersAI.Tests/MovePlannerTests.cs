@@ -18,7 +18,8 @@ namespace CheckersAI.Tests
                 var pieces = new Piece?[8, 8];
                 pieces[4, 3] = Piece.DOWN_TEAM;
                 pieces[5, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var expectedMoveForDown = new MovePlan()
                 {
                     StartRow = 4,
@@ -50,7 +51,8 @@ namespace CheckersAI.Tests
                 var pieces = new Piece?[8, 8];
                 pieces[0, 3] = Piece.DOWN_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 2);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 2);
                 var actualMove = planner.GetNextMove(true);
                 Assert.AreEqual(0, actualMove.Heuristic, "No winner. Not enough time.");
             }
@@ -59,7 +61,8 @@ namespace CheckersAI.Tests
                 pieces[0, 3] = Piece.DOWN_TEAM;
                 pieces[1, 2] = Piece.UP_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 2);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 2);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -79,7 +82,8 @@ namespace CheckersAI.Tests
                 pieces[0, 5] = Piece.DOWN_TEAM; 
                 pieces[1, 2] = Piece.UP_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 2);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 2);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -104,7 +108,8 @@ namespace CheckersAI.Tests
                 pieces[5, 2] = Piece.DOWN_TEAM;
                 pieces[7, 0] = Piece.UP_TEAM;
                 pieces[7, 2] = Piece.DOWN_TEAM_KING;
-                var planner = new MovePlanner(pieces, 6);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 6);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -143,7 +148,8 @@ namespace CheckersAI.Tests
                 pieces[4, 5] = Piece.DOWN_TEAM_KING;
                 pieces[5, 6] = Piece.UP_TEAM;
                 pieces[6, 7] = Piece.DOWN_TEAM;
-                var planner = new MovePlanner(pieces, 6);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 6);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 1,
@@ -165,7 +171,8 @@ namespace CheckersAI.Tests
                 pieces[4, 5] = Piece.DOWN_TEAM_KING;
                 pieces[4, 7] = Piece.UP_TEAM;
                 pieces[6, 7] = Piece.DOWN_TEAM;
-                var planner = new MovePlanner(pieces, 6);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 6);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -206,7 +213,8 @@ namespace CheckersAI.Tests
                 var pieces = new Piece?[8, 8];
                 pieces[3, 4] = Piece.DOWN_TEAM;
                 pieces[6, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 3,
@@ -225,7 +233,8 @@ namespace CheckersAI.Tests
                 pieces[3, 4] = Piece.DOWN_TEAM;
                 pieces[4, 1] = Piece.DOWN_TEAM;
                 pieces[6, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -261,7 +270,8 @@ namespace CheckersAI.Tests
                 pieces[3, 6] = Piece.DOWN_TEAM;
                 pieces[4, 1] = Piece.DOWN_TEAM;
                 pieces[6, 3] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -313,7 +323,8 @@ namespace CheckersAI.Tests
                 pieces[1, 4] = Piece.DOWN_TEAM;
                 pieces[1, 6] = Piece.DOWN_TEAM;
                 pieces[5, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var okMoves = new List<MovePlan>();
                 okMoves.Add(new MovePlan()
                 {
@@ -380,7 +391,8 @@ namespace CheckersAI.Tests
                 pieces[0, 5] = Piece.DOWN_TEAM;
                 pieces[3, 2] = Piece.UP_TEAM;
                 pieces[6, 5] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 4);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 4);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -400,7 +412,8 @@ namespace CheckersAI.Tests
                 pieces[0, 5] = Piece.DOWN_TEAM;
                 pieces[3, 2] = Piece.UP_TEAM;
                 pieces[6, 5] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -420,7 +433,8 @@ namespace CheckersAI.Tests
                 pieces[0, 5] = Piece.DOWN_TEAM;
                 pieces[1, 2] = Piece.UP_TEAM;
                 pieces[6, 5] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 4);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 4);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -440,7 +454,8 @@ namespace CheckersAI.Tests
                 pieces[0, 5] = Piece.DOWN_TEAM;
                 pieces[1, 2] = Piece.UP_TEAM;
                 pieces[6, 5] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 0,
@@ -460,7 +475,8 @@ namespace CheckersAI.Tests
                 pieces[6, 5] = Piece.DOWN_TEAM;
                 pieces[7, 2] = Piece.UP_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 4);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 4);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 7,
@@ -480,7 +496,8 @@ namespace CheckersAI.Tests
                 pieces[6, 5] = Piece.DOWN_TEAM;
                 pieces[7, 2] = Piece.UP_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, _mediumPlanDepth);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, _mediumPlanDepth);
                 var expectedMove = new MovePlan()
                 {
                     StartRow = 7,
@@ -585,7 +602,8 @@ namespace CheckersAI.Tests
                 pieces[7, 2] = Piece.UP_TEAM;
                 pieces[7, 4] = Piece.UP_TEAM;
                 pieces[7, 6] = Piece.UP_TEAM;
-                var planner = new MovePlanner(pieces, 7);
+                var board = new GameBoard(pieces);
+                var planner = new MovePlanner(board, 3);
                 var nextMove = planner.GetNextMove(true);
             }
         }

@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="Models\GameBoard.cs" />
     <Compile Include="Models\LegalMoveFinder.cs" />
+    <Compile Include="Models\MovePlannerFactory.cs" />
     <Compile Include="Models\Piece.cs" />
     <Compile Include="Models\MovePlan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

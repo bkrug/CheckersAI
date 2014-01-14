@@ -8,6 +8,12 @@ namespace CheckersAI.Models
     public interface IGameBoard
     {
         void MovePiece(int row, int column, Move move);
+        GameBoard CloneAndMove(int row, int column, Move move);
+        GameBoard Clone();
+        int UpPieces { get; }
+        int DownPieces { get; }
+        Piece? this[int r, int c] { get; set; }
+        void Reset();
     }
 
     public class GameBoard : IGameBoard

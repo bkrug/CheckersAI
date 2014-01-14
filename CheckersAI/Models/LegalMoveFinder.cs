@@ -7,12 +7,12 @@ namespace CheckersAI.Models
 {
     public class LegalMoveFinder
     {
-        private GameBoard _pieces; 
+        private IGameBoard _pieces; 
         private LegalMoveFinder() { }
         public const int MIN_POSITION = 0;
         public const int MAX_POSITION = 7;
 
-        public LegalMoveFinder(GameBoard pieces)
+        public LegalMoveFinder(IGameBoard pieces)
         {
             _pieces = pieces;
         }

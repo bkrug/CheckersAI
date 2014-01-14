@@ -5,9 +5,14 @@ using System.Web;
 
 namespace CheckersAI.Models
 {
-	public class MovePlanner
+    public interface IMovePlanner
+    {
+        MovePlan GetNextMove(bool team);
+    }
+
+	public class MovePlanner : IMovePlanner
 	{
-        private Piece?[,] _pieces;
+        private IGameBoard _board;
         private int _planDepth;
 
         public static int WinHeuristic
@@ -16,21 +21,20 @@ namespace CheckersAI.Models
         }
 
 		private MovePlanner() {}
-        public MovePlanner(Piece?[,] pieces, int planDepth) {
-            _pieces = pieces;
+        public MovePlanner(IGameBoard board, int planDepth) {
+            _board = board;
             _planDepth = planDepth;
         }
 
 		//TODO: A unit test will end up testing other methods as well as this one.
         public MovePlan GetNextMove(bool team) {
-            var board = new GameBoard(_pieces);
-            var finder = new LegalMoveFinder(board);
+            var finder = new LegalMoveFinder(_board);
             var movePlans = new List<MovePlan>();
             foreach (var positionMove in finder.GetLegalMoves(team))
             {
                 foreach (var move in positionMove.Moves)
                 {
-                    var newBoard = board.CloneAndMove(positionMove.Row, positionMove.Column, move);
+                    var newBoard = _board.CloneAndMove(positionMove.Row, positionMove.Column, move);
                     var plan = GetMovePlans(newBoard, _planDepth, Int32.MinValue, Int32.MaxValue, !team);
                     plan.StartRow = positionMove.Row;
                     plan.StartColumn = positionMove.Column;
@@ -85,7 +89,7 @@ namespace CheckersAI.Models
             }
         }
 
-        private int GetHeuristic(GameBoard board)
+        private int GetHeuristic(IGameBoard board)
         {
 			var heuristic = board.DownPieces - board.UpPieces;
             return heuristic;
