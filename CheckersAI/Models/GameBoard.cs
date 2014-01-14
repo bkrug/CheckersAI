@@ -14,6 +14,7 @@ namespace CheckersAI.Models
         int DownPieces { get; }
         Piece? this[int r, int c] { get; set; }
         void Reset();
+        bool? Winner { get; }
     }
 
     public class GameBoard : IGameBoard

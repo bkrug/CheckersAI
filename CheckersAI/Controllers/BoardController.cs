@@ -41,6 +41,8 @@ namespace CheckersAI.Controllers
         [HttpPost]
         public ActionResult MovePiece(int row, int column, string move)
         {
+            if (_board.Winner.HasValue)
+                return Json(new { success = false, error = "Cannot make a move. The game is complete." });
             var moveObj = _jss.Deserialize<Move>(move);
             _board.MovePiece(row, column, moveObj);
             return Json(new { success = true, _board });
