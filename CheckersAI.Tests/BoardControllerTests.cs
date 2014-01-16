@@ -58,12 +58,20 @@ namespace CheckersAI.Tests
         {
             var team = true;
             var board = new Mock<IGameBoard>();
+            board.Setup(m => m[3, 2]).Returns(Piece.DOWN_TEAM);
+            board.Setup(m => m[2, 1]).Returns(Piece.UP_TEAM);
+            var movePlan = new MovePlan() { Move = new Move(), StartRow = 9, StartColumn = 10 };
             var planner = new Mock<IMovePlanner>();
+            planner.Setup(m => m.GetNextMove(It.IsAny<bool>())).Returns(movePlan);
             var session = new MockSessionWrapper();
             session[BoardController.TEAM_KEY] = team;
             var controller = new BoardController(session, board.Object, new MockMovePlannerFactory(planner.Object));
             var actionResult = controller.GetComputerMove();
             planner.Verify(m => m.GetNextMove(!team), "The next computer move was requested.");
+            board.Verify(m => m.MovePiece(movePlan.StartRow, movePlan.StartColumn, movePlan.Move), "The movePlan from MovePlanner() was used to move a piece.");
+            dynamic data = ((JsonResult)actionResult).Data;
+            dynamic returnedBoard = data.board;
+            Assert.AreSame(board.Object, returnedBoard);
             Assert.IsTrue(actionResult is ActionResult, "returned value is a type of ActionResult");
         }
 

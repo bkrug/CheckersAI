@@ -21,9 +21,7 @@ namespace CheckersAI.Controllers
         }
 
         public BoardController() {
-            _session = new SessionWrapper(Session);
-            _session[BOARD_KEY] = new GameBoard();
-            _session[FACTORY_KEY] = MovePlannerFactory.Instance;
+
         }
 
         public BoardController(ISessionWrapper session, IGameBoard board, IMovePlannerFactory plannerFactory)
@@ -33,9 +31,20 @@ namespace CheckersAI.Controllers
             _session[FACTORY_KEY] = plannerFactory;
         }
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            if (_session == null)
+            {
+                _session = new SessionWrapper(Session);
+                _session[BOARD_KEY] = new GameBoard();
+                _session[FACTORY_KEY] = MovePlannerFactory.Instance;
+            }
+        }
+
         public ActionResult Index()
         {
-            return View("Game");
+            return View("Game", _board);
         }
 
         [HttpPost]
@@ -45,7 +54,7 @@ namespace CheckersAI.Controllers
                 return Json(new { success = false, error = "Cannot make a move. The game is complete." });
             var moveObj = _jss.Deserialize<Move>(move);
             _board.MovePiece(row, column, moveObj);
-            return Json(new { success = true, _board });
+            return Json(new { success = true, board = _board });
         }
 
         [HttpPost]
@@ -54,7 +63,8 @@ namespace CheckersAI.Controllers
             var factory = ((IMovePlannerFactory)_session[FACTORY_KEY]);
             var planner = factory.GetMovePlanner(_board);
             var movePlan = planner.GetNextMove(!((bool)_session[TEAM_KEY]));
-            return Json(new { success = true, movePlan });
+            _board.MovePiece(movePlan.StartRow, movePlan.StartColumn, movePlan.Move);
+            return Json(new { success = true, board = _board });
         }
 
         [HttpPost]
@@ -63,6 +73,16 @@ namespace CheckersAI.Controllers
             _session[TEAM_KEY] = team;
             _board.Reset();
             return Json(new { success = true, _board });
+        }
+
+        public ActionResult GetPieceEnum()
+        {
+            var dict = new Dictionary<string, int>();
+            foreach(var curPiece in Enum.GetValues(typeof(Piece)) )
+            {
+                dict.Add(curPiece.ToString(), (int)curPiece);
+            }
+            return Json(new { pieceDictionary = dict });
         }
     }
 
@@ -74,6 +94,7 @@ namespace CheckersAI.Controllers
     public class SessionWrapper : ISessionWrapper
     {
         private HttpSessionStateBase _session;
+        private System.Web.SessionState.HttpSessionState httpSessionState;
 
         public object this[string index]
         {

@@ -1,0 +1,13 @@
+﻿@model CheckersAI.Models.GameBoard
+@{
+    ViewBag.Title = "Game";
+}
+
+<h2>Checkers!</h2>
+
+<input type="button" class="js-new-game ui-button" value="New Game"/>
+
+Remaining Up Pieces: <span class="js-up-count ui-up-count">@Model.UpPieces</span>
+Remaining Down Pieces: <span class="js-down-count ui-down-count">@Model.DownPieces</span>
+
+<div class="js-board ui-board"></div>
