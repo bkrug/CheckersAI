@@ -21,11 +21,22 @@
                 team: true
             },
             type: 'POST',
-            success: self.DisplayNewMove
+            success: function (data) { self.DisplayNewMove(data, false); }
         });
     };
 
     self.MakeComputerMove = function () {
+        setTimeout(function () {
+            self.$board.prepend('<div class="ui-spinner"></div>');
+            $.ajax({
+                url: '/Board/GetComputerMove',
+                type: 'POST',
+                success: function (data) {
+                    self.DisplayNewMove(data, false);
+                }
+            });
+        },
+        2000);
     };
 
     self.DisplayNewMove = function (data, makeComputerMove) {
@@ -33,5 +44,10 @@
         self.$upcount.text(data.board.UpPieces);
         self.$downcount.text(data.board.DownPieces);
         self.$board.html(builder.Build(data.board));
+        self.$board.find('.js-playable').each(function (i) {
+            (new Square($(this))).Init();
+        });
+        if (makeComputerMove)
+            self.MakeComputerMove();
     };
 };

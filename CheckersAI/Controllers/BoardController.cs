@@ -35,16 +35,18 @@ namespace CheckersAI.Controllers
         {
             base.OnActionExecuting(filterContext);
             if (_session == null)
-            {
                 _session = new SessionWrapper(Session);
+            if (_session[BOARD_KEY] == null)
                 _session[BOARD_KEY] = new GameBoard();
+            if (_session[FACTORY_KEY] == null)
                 _session[FACTORY_KEY] = MovePlannerFactory.Instance;
-            }
         }
 
         public ActionResult Index()
         {
-            ViewBag.PieceEnum = (new JavaScriptSerializer()).Serialize(GetPieceEnum());
+            var jss = new JavaScriptSerializer();
+            ViewBag.PieceEnum = jss.Serialize(GetPieceEnum());
+            ViewBag.DirectionEnum = jss.Serialize(GetDirectionEnum());
             return View("Game", _board);
         }
 
@@ -80,9 +82,15 @@ namespace CheckersAI.Controllers
         {
             var dict = new Dictionary<string, int>();
             foreach(var curPiece in Enum.GetValues(typeof(Piece)) )
-            {
                 dict.Add(curPiece.ToString(), (int)curPiece);
-            }
+            return dict;
+        }
+
+        private Dictionary<string, int> GetDirectionEnum()
+        {
+            var dict = new Dictionary<string, int>();
+            foreach (var curDir in Enum.GetValues(typeof(MoveDirection)))
+                dict.Add(curDir.ToString(), (int)curDir);
             return dict;
         }
     }

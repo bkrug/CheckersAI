@@ -1,4 +1,21 @@
 ﻿.ui-board {
+	display: inline-block;
+	position: relative;
+
+	.ui-spinner 
+	{
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-size: 20%;
+		background-image: url("/Content/spinner.gif");
+		background-color: rgba(128, 128, 128, 0.5);
+		background-position: center;
+		background-repeat: no-repeat;
+	}
+
     .ui-row 
     {
 		height: 60px;
@@ -12,10 +29,27 @@
 			&.ui-playable
 			{
 				background-image: url("/Content/tiles/blackback.bmp");
-				&.ui-down { background-image: url("/Content/tiles/black.bmp"); }
-				&.ui-up { background-image: url("/Content/tiles/red.bmp"); }
-				&.ui-down-king { background-image: url("/Content/tiles/blackking.bmp"); }
-				&.ui-up-king { background-image: url("/Content/tiles/redking.bmp"); }
+				&.ui-down 
+				{ 
+					background-image: url("/Content/tiles/black.bmp"); 
+					&.ui-high { background-image: url("/Content/tiles/blackhigh.bmp"); }
+				}
+				&.ui-up 
+				{ 
+					background-image: url("/Content/tiles/red.bmp"); 
+					&.ui-high { background-image: url("/Content/tiles/redhigh.bmp"); }
+				}
+				&.ui-down-king 
+				{ 
+					background-image: url("/Content/tiles/blackking.bmp"); 
+					&.ui-high { background-image: url("/Content/tiles/blackkinghigh.bmp"); }
+				}
+				&.ui-up-king 
+				{ 
+					background-image: url("/Content/tiles/redking.bmp"); 
+					&.ui-high { background-image: url("/Content/tiles/redkinghigh.bmp"); }
+				}
+				&.ui-high { background-image: url("/Content/tiles/blackbackhigh.bmp"); }
 			}
 			&.ui-nonplayable
 			{

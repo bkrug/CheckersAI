@@ -135,6 +135,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\spinner.GIF" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -208,6 +209,7 @@
     <Content Include="Content\Site.css" />
     <Compile Include="Models\MovePlanner.cs" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Scripts\Direction.js" />
     <Content Include="Scripts\Dashboard.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -224,6 +226,7 @@
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\less.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Move.js" />
     <Content Include="Scripts\Square.js" />
     <Content Include="Scripts\BoardBuilder.js" />
     <Content Include="Scripts\Piece.js" />

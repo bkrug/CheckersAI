@@ -104,6 +104,9 @@ namespace CheckersAI.Models
             for (var r = 0; r < 3; ++r)
                 for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; c = c + 2)
                     this[r, c] = Piece.DOWN_TEAM;
+            for (var r = 3; r < 5; ++r)
+                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; c = c + 2)
+                    this[r, c] = null;
             for (var r = 5; r <= LegalMoveFinder.MAX_POSITION; ++r)
                 for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; c = c + 2)
                     this[r, c] = Piece.UP_TEAM;

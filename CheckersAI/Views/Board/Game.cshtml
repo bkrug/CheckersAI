@@ -4,12 +4,23 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script src="../Scripts/Dashboard.js" type="text/javascript"></script>
+<script src="../Scripts/Square.js" type="text/javascript"></script>
+<script src="../Scripts/Move.js" type="text/javascript"></script>
 <script src="../Scripts/BoardBuilder.js" type="text/javascript"></script>
+<script src="../Scripts/Piece.js" type="text/javascript"></script>
+<script src="../Scripts/Direction.js" type="text/javascript"></script>
 <script>
     var PageRegistration = function () {
         new Dashboard($('body > .js-game-dashboard')).Init();
     };
+    $(document).bind('ready', function () {
+        (new Piece()).Build(JSON.parse($('.js-piece-enum').val()));
+        (new Direction()).Build(JSON.parse($('.js-direction-enum').val()));
+    });
 </script>
+
+<input type="hidden" class="js-piece-enum" value="@ViewBag.PieceEnum"/>
+<input type="hidden" class="js-direction-enum" value="@ViewBag.DirectionEnum"/>
 
 <div class="js-game-dashboard">
     <h2>Checkers!</h2>
