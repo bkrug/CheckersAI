@@ -17,10 +17,11 @@
     };
 
     self.MouseDown = function (e) {
-        if (Move.Started())
-            CompleteMove();
-        else
-            BeginMove();
+        if (Move.HumanTurn)
+            if (Move.Started() && Move.IsValid())
+                CompleteMove();
+            else if (!Move.Started())
+                BeginMove();
     };
 
     var BeginMove = function () {
@@ -34,6 +35,7 @@
     };
 
     var CompleteMove = function () {
+        Move.HumanTurn = false;
         $.ajax({
             url: "/Board/MovePiece",
             data: {
@@ -101,7 +103,7 @@
         var hDirection = hMove > 0 ? 1 : -1;
         var $adjacent = $board.find('.r' + (Move.StopRow + vDirection) + 'c' + (Move.StopColumn + hDirection));
         var $next = $board.find('.r' + (Move.StopRow + 2 * vDirection) + 'c' + (Move.StopColumn + 2 * hDirection));
-        return { adjacent: $adjacent, next: $next, moveAmount: vMove };
+        return { adjacent: $adjacent, next: $next, moveAmount: Math.abs(vMove) };
     };
 
     var LegalSingle = function ($adjacent, direction) {

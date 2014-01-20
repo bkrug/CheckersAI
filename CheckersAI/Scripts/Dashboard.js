@@ -9,6 +9,8 @@
     self.$board = self.$elt.find('.js-board');
     self.$upcount = self.$elt.find('.js-up-count');
     self.$downcount = self.$elt.find('.js-down-count');
+    self.$winnerarea = self.$elt.find('.js-winner-area');
+    self.$winner = self.$winnerarea.find('.js-winner');
 
     self.Init = function () {
         self.$elt.find('.js-new-game').click(self.NewGameClick);
@@ -44,10 +46,20 @@
         self.$upcount.text(data.board.UpPieces);
         self.$downcount.text(data.board.DownPieces);
         self.$board.html(builder.Build(data.board));
-        self.$board.find('.js-playable').each(function (i) {
-            (new Square($(this))).Init();
-        });
-        if (makeComputerMove)
-            self.MakeComputerMove();
+        if (data.board.Winner == true || data.board.Winner == false) {
+            self.$winnerarea.show();
+            var winnerText = data.board.Winner ? "Black" : "Red";
+            winnerText += data.board.WinnerByElimination == true || data.board.WinnerByElimination == false ? " (by elimination) " : " (by gridlock)";
+            self.$winner.text(winnerText);
+        }
+        else {
+            self.$board.find('.js-playable').each(function (i) {
+                (new Square($(this))).Init();
+            });
+            if (makeComputerMove)
+                self.MakeComputerMove();
+            else
+                Move.HumanTurn = true;
+        }
     };
 };

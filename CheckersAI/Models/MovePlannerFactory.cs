@@ -19,7 +19,7 @@ namespace CheckersAI.Models
 
         public IMovePlanner GetMovePlanner(IGameBoard board)
         {
-            return new MovePlanner(board, 9);
+            return new MovePlanner(board, 7);
         }
     }
 }

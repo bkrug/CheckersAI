@@ -28,10 +28,13 @@
     <input type="button" class="js-new-game ui-button" value="New Game"/>
 
     <div class="ui-up-area">
-    Remaining Up Pieces: <span class="js-up-count ui-up-count">@Model.UpPieces</span>
+        Remaining Up Pieces: <span class="js-up-count ui-up-count">@Model.UpPieces</span>
     </div>
     <div class="ui-down-area">
-    Remaining Down Pieces: <span class="js-down-count ui-down-count">@Model.DownPieces</span>
+        Remaining Down Pieces: <span class="js-down-count ui-down-count">@Model.DownPieces</span>
+    </div>
+    <div class="js-winner-area ui-winner-area" style="display:none;">
+        Game Winner: <span class="js-winner ui-winner"></span>
     </div>
 
     <div class="js-board ui-board"></div>

@@ -2,6 +2,7 @@
     var self = this;
 
     Move.HumanTeam = true;
+    Move.HumanTurn = true;
     Move.StartRow;
     Move.StartColumn;
     Move.StopRow;
@@ -18,6 +19,10 @@
 
     Move.Started = function () {
         return Move.StartRow != null && Move.StartColumn != null;
+    };
+
+    Move.IsValid = function () {
+        return Move.Steps.length > 0;
     };
 
     Move.Stringify = function () {

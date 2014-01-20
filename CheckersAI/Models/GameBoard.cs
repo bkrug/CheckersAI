@@ -99,6 +99,19 @@ namespace CheckersAI.Models
                             ++UpPieces;                    
         }
 
+        //public void Reset()
+        //{
+        //    this[7, 4] = Piece.DOWN_TEAM_KING;
+        //    this[1, 2] = Piece.DOWN_TEAM;
+        //    this[2, 3] = Piece.DOWN_TEAM;
+        //    this[6, 1] = Piece.UP_TEAM;
+        //    this[5, 0] = Piece.UP_TEAM;
+        //    this[4, 1] = Piece.UP_TEAM;
+        //    this[6, 7] = Piece.DOWN_TEAM;
+        //    UpPieces = 3;
+        //    DownPieces = 4;
+        //}
+
         public void Reset()
         {
             for (var r = 0; r < 3; ++r)
