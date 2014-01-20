@@ -44,6 +44,7 @@ namespace CheckersAI.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.PieceEnum = (new JavaScriptSerializer()).Serialize(GetPieceEnum());
             return View("Game", _board);
         }
 
@@ -72,17 +73,17 @@ namespace CheckersAI.Controllers
         {
             _session[TEAM_KEY] = team;
             _board.Reset();
-            return Json(new { success = true, _board });
+            return Json(new { success = true, board = _board });
         }
 
-        public ActionResult GetPieceEnum()
+        private Dictionary<string, int> GetPieceEnum()
         {
             var dict = new Dictionary<string, int>();
             foreach(var curPiece in Enum.GetValues(typeof(Piece)) )
             {
                 dict.Add(curPiece.ToString(), (int)curPiece);
             }
-            return Json(new { pieceDictionary = dict });
+            return dict;
         }
     }
 

@@ -4,9 +4,10 @@
     self.Build = function(board) {
         var results = '';
         for (var r = 0; r < 8; ++r) {
+            results += '<div class="js-row ui-row">';
             for (var c = 0; c < 8; ++c) {
                 var pieceClass = '';
-                switch (board[r, c]) {
+                switch (board.PieceLayout[r][c]) {
                     case Piece.UP_TEAM:
                         pieceClass = 'ui-up';
                         break;
@@ -24,6 +25,7 @@
                 var positionClass = 'r' + r + 'c' + c;
                 results += '<div class="js-square ui-square ' + positionClass + ' ' + playableClass + ' ' + pieceClass + '"></div>';
             }
+            results += '</div>';
         }
         return results;
     }

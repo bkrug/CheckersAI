@@ -122,6 +122,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <None Include="Content\checkers.less" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -188,6 +189,21 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\tiles\black.bmp" />
+    <Content Include="Content\tiles\blackback.bmp" />
+    <Content Include="Content\tiles\blackbackhigh.bmp" />
+    <Content Include="Content\tiles\blackhigh.bmp" />
+    <Content Include="Content\tiles\blackking.bmp" />
+    <Content Include="Content\tiles\blackkinghigh.bmp" />
+    <Content Include="Content\tiles\blackkingtile.bmp" />
+    <Content Include="Content\tiles\blacktile.bmp" />
+    <Content Include="Content\tiles\red.bmp" />
+    <Content Include="Content\tiles\redback.bmp" />
+    <Content Include="Content\tiles\redhigh.bmp" />
+    <Content Include="Content\tiles\redking.bmp" />
+    <Content Include="Content\tiles\redkinghigh.bmp" />
+    <Content Include="Content\tiles\redkingtile.bmp" />
+    <Content Include="Content\tiles\redtile.bmp" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Compile Include="Models\MovePlanner.cs" />
@@ -206,6 +222,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\less.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\Square.js" />
     <Content Include="Scripts\BoardBuilder.js" />

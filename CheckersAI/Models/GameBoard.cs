@@ -49,6 +49,20 @@ namespace CheckersAI.Models
             }
         }
 
+        public Piece?[][] PieceLayout {
+            get
+            {
+                var array = new Piece?[8][];
+                for (var r = 0; r <= LegalMoveFinder.MAX_POSITION; ++r)
+                {
+                    array[r] = new Piece?[8];
+                    for (var c = 0; c <= LegalMoveFinder.MAX_POSITION; ++c)
+                        array[r][c] = this[r, c];
+                }
+                return array;
+            }
+        }
+
         public int UpPieces { get; private set; }
         public int DownPieces { get; private set; }
 
@@ -88,10 +102,10 @@ namespace CheckersAI.Models
         public void Reset()
         {
             for (var r = 0; r < 3; ++r)
-                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; ++c)
+                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; c = c + 2)
                     this[r, c] = Piece.DOWN_TEAM;
             for (var r = 5; r <= LegalMoveFinder.MAX_POSITION; ++r)
-                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; ++c)
+                for (var c = (r + 1) % 2; c <= LegalMoveFinder.MAX_POSITION; c = c + 2)
                     this[r, c] = Piece.UP_TEAM;
             UpPieces = 12;
             DownPieces = 12;

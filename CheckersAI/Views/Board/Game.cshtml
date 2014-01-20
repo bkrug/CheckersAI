@@ -1,13 +1,27 @@
 ﻿@model CheckersAI.Models.GameBoard
 @{
     ViewBag.Title = "Game";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="../Scripts/Dashboard.js" type="text/javascript"></script>
+<script src="../Scripts/BoardBuilder.js" type="text/javascript"></script>
+<script>
+    var PageRegistration = function () {
+        new Dashboard($('body > .js-game-dashboard')).Init();
+    };
+</script>
 
-<h2>Checkers!</h2>
+<div class="js-game-dashboard">
+    <h2>Checkers!</h2>
 
-<input type="button" class="js-new-game ui-button" value="New Game"/>
+    <input type="button" class="js-new-game ui-button" value="New Game"/>
 
-Remaining Up Pieces: <span class="js-up-count ui-up-count">@Model.UpPieces</span>
-Remaining Down Pieces: <span class="js-down-count ui-down-count">@Model.DownPieces</span>
+    <div class="ui-up-area">
+    Remaining Up Pieces: <span class="js-up-count ui-up-count">@Model.UpPieces</span>
+    </div>
+    <div class="ui-down-area">
+    Remaining Down Pieces: <span class="js-down-count ui-down-count">@Model.DownPieces</span>
+    </div>
 
-<div class="js-board ui-board"></div>
+    <div class="js-board ui-board"></div>
+</div>
