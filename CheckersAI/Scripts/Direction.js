@@ -12,6 +12,20 @@
             callback();
     };
 
+    Direction.DirectionY = function (direction) {
+        if (direction == Direction.UP_LEFT || direction == Direction.UP_RIGHT)
+            return -1;
+        else
+            return 1;
+    }
+
+    Direction.DirectionX = function (direction) {
+        if (direction == Direction.UP_LEFT || direction == Direction.DOWN_LEFT)
+            return -1;
+        else
+            return 1;
+    };
+
     Direction.UP_LEFT = null;
     Direction.UP_RIGHT = null;
     Direction.DOWN_LEFT = null;

@@ -67,7 +67,7 @@ namespace CheckersAI.Controllers
             var planner = factory.GetMovePlanner(_board);
             var movePlan = planner.GetNextMove(!((bool)_session[TEAM_KEY]));
             _board.MovePiece(movePlan.StartRow, movePlan.StartColumn, movePlan.Move);
-            return Json(new { success = true, board = _board });
+            return Json(new { success = true, board = _board, move = movePlan });
         }
 
         [HttpPost]

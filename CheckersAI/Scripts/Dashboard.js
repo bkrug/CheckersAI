@@ -11,6 +11,8 @@
     self.$downcount = self.$elt.find('.js-down-count');
     self.$winnerarea = self.$elt.find('.js-winner-area');
     self.$winner = self.$winnerarea.find('.js-winner');
+    self.moveCalcDelay = 1000;
+    self.moveDisplayDelay = 1000;
 
     self.Init = function () {
         self.$elt.find('.js-new-game').click(self.NewGameClick);
@@ -29,17 +31,45 @@
 
     self.MakeComputerMove = function () {
         setTimeout(function () {
-            self.$board.prepend('<div class="ui-spinner"></div>');
+            self.$board.prepend('<div class="js-loading ui-spinner"></div>');
             $.ajax({
                 url: '/Board/GetComputerMove',
                 type: 'POST',
                 success: function (data) {
-                    self.DisplayNewMove(data, false);
+                    self.DisplayComputerMove(data);
                 }
             });
         },
-        2000);
+        self.moveCalcDelay);
     };
+
+    self.DisplayComputerMove = function (data) {
+        self.$board.find('.js-loading').remove();
+        self.AnimateMove(data);
+        setTimeout(function () {
+            self.DisplayNewMove(data, false);
+        },
+        self.moveDisplayDelay);
+    }
+
+    self.AnimateMove = function (data) {
+        var pos = {};
+        pos.row = data.move.StartRow;
+        pos.col = data.move.StartColumn;
+        self.$board.find('.r' + pos.row + 'c' + pos.col).addClass('ui-high');
+        for (var i = 0; i < data.move.Move.Steps.length; ++i) {
+            pos = self.HighlightNextSquare(data.move.Move.Steps[i], pos);
+            if (data.move.Move.Steps[i].Jump)
+                pos = self.HighlightNextSquare(data.move.Move.Steps[i], pos);
+        }
+    };
+
+    self.HighlightNextSquare = function (step, pos) {
+        pos.row += Direction.DirectionY(step.Direction);
+        pos.col += Direction.DirectionX(step.Direction);
+        self.$board.find('.r' + pos.row + 'c' + pos.col).addClass('ui-high');
+        return pos;
+    }
 
     self.DisplayNewMove = function (data, makeComputerMove) {
         var builder = new BoardBuilder();
